@@ -31,7 +31,10 @@ const GuessFormComponent = () => {
                         setWeight(data.guess.guessed_weight.toString());
                         setSize(data.guess.guessed_size.toString());
                         setNames(data.guess.guessed_names);
-                        setDate(data.guess.guessed_birthdate);
+                        // setDate(data.guess.guessed_birthdate);
+                        const formattedDate = data.guess.guessed_birthdate.split('T')[0];
+                        setDate(formattedDate);
+                        console.log(data.guess)
                     }
                 }
             } catch (error) {
