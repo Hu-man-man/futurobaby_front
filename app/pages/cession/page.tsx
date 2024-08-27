@@ -18,20 +18,19 @@ const CessionPage = () => {
 			const userDataString = localStorage.getItem("userData");
 			if (userDataString) {
 				const userData = JSON.parse(userDataString);
-				setUserName(userData.userName);
+				setUserName(userData.userName || "");
 			}
 		}
 	}, [token, router]);
 
 	const handleLogout = () => {
 		logout();
+		localStorage.removeItem("userData");
 		router.push("/"); // Redirige vers la page de connection
 	};
 
 	const handleChangePage = () => {
-		// if (token) {
-			router.push("/"); // Redirection si déjà connecté
-		// }
+		router.push("/"); // Redirection si déjà connecté
 	};
 
 	return (

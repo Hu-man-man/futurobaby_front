@@ -10,22 +10,17 @@ import CountdownComponent from "../../components/CountdownComponent";
 export default function HomePage() {
 	const [name, setName] = useState("");
 	const [password, setPassword] = useState("");
+	const [loading, setLoading] = useState(false);
 	const { token, setToken } = useAuth();
 	const router = useRouter();
 	const { handleOnSignin, handleOnSignup } = useAuthHandlers();
 
 	const targetDate = "2024-10-26T12:00:00";
 
-	// useEffect(() => {
-	// 	if (token) {
-	// 		router.push("pages/cession"); // Redirection si déjà connecté
-	// 	}
-	// }, [token, router]);
-
 	const handleChangePage = () => {
-		// if (token) {
-			router.push("pages/cession"); // Redirection si déjà connecté
-		// }
+		setLoading(true);
+		router.push("pages/cession");
+		setLoading(false);
 	};
 
 	return (
@@ -42,7 +37,8 @@ export default function HomePage() {
 						className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
 						onClick={() => handleChangePage()}
 					>
-                        Faire des suppositions !
+                        {/* Faire des suppositions ! */}
+						{loading ? "Veuillez patienter..." : "Faire des suppositions !"}
                     </button>
 				
             ) : (

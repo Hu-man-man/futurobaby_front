@@ -53,6 +53,8 @@ export function useAuthHandlers() {
             .then((response) => response.json())
             .then((data) => {
                 if (data.token) {
+                    console.log("Storing token and userName in localStorage:", { token: data.token, userName: data.userName }); // Vérifiez les données avant le stockage
+                    
                     setToken(data.token);
                     localStorage.setItem("userData", JSON.stringify({ token: data.token, userName: data.userName }));
                     alert("Compte créé avec succès !");
