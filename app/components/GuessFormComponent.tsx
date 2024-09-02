@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import backendUrl from "@/backendUrl";
 
 const GuessFormComponent = () => {
 	const [gender, setGender] = useState<string>("");
@@ -16,7 +17,7 @@ const GuessFormComponent = () => {
 		// Fonction pour récupérer les données existantes
 		const fetchExistingGuess = async () => {
 			try {
-				const response = await fetch("http://localhost:3001/guesses/current", {
+				const response = await fetch(`${backendUrl}/guesses/current`, {
 					method: "GET",
 					headers: {
 						Authorization: `Bearer ${token}`,
@@ -65,7 +66,7 @@ const GuessFormComponent = () => {
 		};
 
 		try {
-			const response = await fetch("http://localhost:3001/guesses", {
+			const response = await fetch(`${backendUrl}/guesses`, {
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${token}`,
