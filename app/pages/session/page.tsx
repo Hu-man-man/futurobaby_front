@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 import GuessFormComponent from "../../components/GuessFormComponent"
 
-const CessionPage = () => {
+const sessionPage = () => {
 	const router = useRouter();
 	const { token, logout } = useAuth();
 	const [userName, setUserName] = useState("");
@@ -49,10 +49,10 @@ const CessionPage = () => {
 					Retour à l'acceuil
 				</button>
 			</div>
-			<h1 className="text-2xl">Bienvenue dans ta cession {userName} !</h1>
+			<h1 className="text-2xl">Bienvenue dans ta session {userName} !</h1>
             <GuessFormComponent />
 		</main>
 	);
 };
 
-export default CessionPage;
+export default sessionPage;

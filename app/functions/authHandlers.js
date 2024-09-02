@@ -23,7 +23,7 @@ export function useAuthHandlers() {
                     setToken(data.token);
                     localStorage.setItem("userData", JSON.stringify({ token: data.token, userName: data.userName }));
                     alert(data.message);
-                    // router.push("/cession");
+                    // router.push("/session");
                 } else {
                     alert(data.message);
                     setPassword("");
@@ -58,7 +58,7 @@ export function useAuthHandlers() {
                     setToken(data.token);
                     localStorage.setItem("userData", JSON.stringify({ token: data.token, userName: data.userName }));
                     alert("Compte créé avec succès !");
-                    // router.push("/cession");
+                    // router.push("/session");
                 } else {
                     alert(data.message || "Erreur lors de la création du compte.");
                 }

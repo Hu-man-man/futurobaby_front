@@ -19,7 +19,7 @@ export default function HomePage() {
 
 	const handleChangePage = () => {
 		setLoading(true);
-		router.push("pages/cession");
+		router.push("pages/session");
 		setLoading(false);
 	};
 
