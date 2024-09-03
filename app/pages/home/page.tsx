@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Test } from "../../components/test";
 import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useAuthHandlers } from "../../functions/authHandlers";
@@ -16,6 +15,12 @@ export default function HomePage() {
 	const { token, setToken } = useAuth();
 	const router = useRouter();
 	const { handleOnSignin, handleOnSignup } = useAuthHandlers();
+
+	useEffect(() => {
+		if (token) {
+			router.push("pages/session");
+		}
+	}, [token, router]);
 
 	const targetDate = "2024-10-26T12:00:00";
 
@@ -38,35 +43,30 @@ export default function HomePage() {
 	};
 
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-between p-24">
-			<div>
-				<h1>
-					Décompte du temps avant la date théorique de la naissance du bubulle
-				</h1>
-				<CountdownComponent targetDate={targetDate} />
-			</div>
+		<main className="flex min-h-screen flex-col items-center text-center justify-between p-24">
+			<CountdownComponent targetDate={targetDate} />
 			{token ? (
-				<button
-					className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
-					onClick={() => handleChangePage()}
-				>
-					{loading ? "Veuillez patienter..." : "Faire des suppositions !"}
-				</button>
+				<div>{loading && "Veuillez patienter..."}</div>
 			) : (
 				// <div className="w-96 h-auto bg-slate-400 p-11 *:m-2">
-				<div className="w-96 h-auto bg-slate-200 p-11 *:m-2">
-					<h2>{isLoginMode ? "Se connecter" : "Créer un compte"}</h2>
+				<div className="w-96 h-auto p-11 *:m-2">
+					<h2 className="text-3xl font-bold">
+						{isLoginMode ? "Se connecter" : "Créer un compte"}
+					</h2>
+					<p>{!isLoginMode && "Pour être tenu au courant de la naissance et faire des pronistics"}</p>
 					<input
+						className="bg-yellow-200 p-1"
 						type="text"
-						placeholder="Ton nom"
+						placeholder="Nom"
 						title="name"
 						value={name}
 						onChange={(e) => setName(e.target.value)}
 						required
 					/>
 					<input
+						className="bg-yellow-200 p-1"
 						type="password"
-						placeholder="Ton mot de passe"
+						placeholder="Mot de passe"
 						title="password"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
@@ -74,8 +74,9 @@ export default function HomePage() {
 					/>
 					{!isLoginMode && (
 						<input
+							className="bg-yellow-200 p-1"
 							type="email"
-							placeholder="Ton email"
+							placeholder="Email"
 							title="email"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
@@ -83,24 +84,16 @@ export default function HomePage() {
 						/>
 					)}
 					<div className="custom-button">
-						<input
-							type="button"
-							value="Valider"
-							onClick={handleSubmit}
-						/>
+						<input type="button" value="Valider" onClick={handleSubmit} />
 					</div>
-					<div className="w-48 flex justify-center rounded bg-slate-500 mt-2">
-						<input
-							type="button"
-							value={isLoginMode ? "Créer un compte" : "Se connecter"}
-							onClick={toggleMode}
-						/>
+					<div
+						className=" text-slate-500 hover:text-black hover:cursor-pointer pt-10"
+						onClick={toggleMode}
+					>
+						{isLoginMode ? "Créer un compte" : "Se connecter"}
 					</div>
 				</div>
 			)}
-			<Test />
 		</main>
 	);
-
 }
-

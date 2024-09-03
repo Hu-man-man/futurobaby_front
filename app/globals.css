@@ -2,17 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'arista';
+  src: url('/arista.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'crayon';
+  src: url('/crayon.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.schoolbell-regular {
+  font-family: "Schoolbell", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
 /* global.css */
 
 .custom-button {
-  background-color: #ef4444; /* Couleur de fond verte */
+  font-family: crayon;
+  letter-spacing: 0.15em;
+  background-color: #292524; /* Couleur de fond verte */
   border: none; /* Supprime la bordure par défaut */
-  color: white; /* Couleur du texte */
-  padding: 15px 32px; /* Espacement intérieur du bouton */
+  color: #e2e8f0; /* Couleur du texte */
+  padding: 0.5rem 1.5rem; /* Espacement intérieur du bouton */
   text-align: center; /* Alignement du texte */
   text-decoration: none; /* Supprime la décoration du texte */
   display: inline-block; /* Affichage en ligne */
-  font-size: 16px; /* Taille de la police */
+  font-size: 1.25rem; /* Taille de la police */
   margin: 4px 2px; /* Marges autour du bouton */
   cursor: pointer; /* Curseur de pointeur au survol */
   border-radius: 8px; /* Coins arrondis */
@@ -20,7 +41,7 @@
 }
 
 .custom-button:hover {
-  background-color: #c23535; /* Couleur de fond au survol */
+  background-color: #3b3008; /* Couleur de fond au survol */
 }
 
 /* 

@@ -26,6 +26,7 @@ export function useAuthHandlers() {
 						JSON.stringify({ token: data.token, userName: data.userName })
 					);
 					alert(data.message);
+					router.push("pages/session");
 				} else {
 					alert(data.message);
 					setPassword("");
@@ -58,6 +59,7 @@ export function useAuthHandlers() {
 						JSON.stringify({ token: data.token, userName: data.userName })
 					);
 					alert("Compte créé avec succès !");
+					router.push("pages/session");
 				} else {
 					alert(data.message || "Erreur lors de la création du compte.");
 				}

@@ -1,9 +1,11 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
-import GuessFormComponent from "../../components/GuessFormComponent"
+import GuessFormComponent from "../../components/GuessFormComponent";
+import CountdownComponent from "@/app/components/CountdownComponent";
 
 const sessionPage = () => {
 	const router = useRouter();
@@ -11,7 +13,6 @@ const sessionPage = () => {
 	const [userName, setUserName] = useState("");
 
 	useEffect(() => {
-		console.log("token  " + token);
 		if (!token) {
 			router.push("/"); // Redirige vers la page d'accueil si non connecté
 		} else {
@@ -23,34 +24,29 @@ const sessionPage = () => {
 		}
 	}, [token, router]);
 
+	const targetDate = "2024-10-26T12:00:00";
+
 	const handleLogout = () => {
 		logout();
 		localStorage.removeItem("userData");
-		router.push("/"); // Redirige vers la page de connection
-	};
-
-	const handleChangePage = () => {
-		router.push("/"); // Redirection si déjà connecté
+		router.push("/"); // Redirige vers la page de connexion
 	};
 
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-center">
-			<div>
-				<button
-					className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
+		<main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">
+			<CountdownComponent targetDate={targetDate} />
+			<div className="mt-6">
+			</div>
+			<h1 className="text-2xl mt-4 font-semibold text-gray-700">
+				Quels sont tes pronostics sur Bubule {userName} ?
+			</h1>
+			<GuessFormComponent />
+				<div
+					className=" text-slate-500 hover:text-black hover:cursor-pointer mt-2"
 					onClick={handleLogout}
 				>
 					Se déconnecter
-				</button>
-				<button
-					className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
-					onClick={handleChangePage}
-				>
-					Retour à l'acceuil
-				</button>
-			</div>
-			<h1 className="text-2xl">Bienvenue dans ta session {userName} !</h1>
-            <GuessFormComponent />
+				</div>
 		</main>
 	);
 };

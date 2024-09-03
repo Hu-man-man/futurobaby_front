@@ -1,10 +1,11 @@
+
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import backendUrl from "@/backendUrl";
 
 const GuessFormComponent = () => {
 	const [gender, setGender] = useState<string>("");
-	const [weight, setWeight] = useState<string>("0");
+	const [weight, setWeight] = useState<string>("0,0");
 	const [size, setSize] = useState<string>("0");
 	const [names, setNames] = useState<{ girlName: string; boyName: string }[]>(
 		Array(5).fill({ girlName: "", boyName: "" })
@@ -14,7 +15,6 @@ const GuessFormComponent = () => {
 	const { token } = useAuth();
 
 	useEffect(() => {
-		// Fonction pour récupérer les données existantes
 		const fetchExistingGuess = async () => {
 			try {
 				const response = await fetch(`${backendUrl}/guesses/current`, {
@@ -27,19 +27,19 @@ const GuessFormComponent = () => {
 				if (response.ok) {
 					const data = await response.json();
 					if (data.guess) {
-						// Remplir les champs avec les données existantes
 						setGender(data.guess.guessed_gender);
 						setWeight(data.guess.guessed_weight.toString());
 						setSize(data.guess.guessed_size.toString());
 						setNames(data.guess.guessed_names);
 
 						const utcDate = new Date(data.guess.guessed_birthdate);
-                        const localDate = utcDate.toISOString().split('T')[0];
-                        const localTime = utcDate.toTimeString().split(' ')[0].substring(0, 5); // HH:MM
-                        setDate(localDate);
-                        setTime(localTime);
-
-						console.log(data.guess);
+						const localDate = utcDate.toISOString().split("T")[0];
+						const localTime = utcDate
+							.toTimeString()
+							.split(" ")[0]
+							.substring(0, 5);
+						setDate(localDate);
+						setTime(localTime);
 					}
 				}
 			} catch (error) {
@@ -53,15 +53,13 @@ const GuessFormComponent = () => {
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
-		// Combiner la date et l'heure en une seule chaîne
-        const dateTime = `${date} ${time}:00`;
+		const dateTime = `${date} ${time}:00`;
 
 		const guessData = {
 			guessed_gender: gender,
 			guessed_weight: parseFloat(weight),
 			guessed_size: parseFloat(size),
 			guessed_names: names,
-			// guessed_birthdate: date,
 			guessed_birthdate: dateTime,
 		};
 
@@ -80,9 +78,7 @@ const GuessFormComponent = () => {
 			}
 
 			const data = await response.json();
-			alert(
-				`Un essai a été envoyé avec succès. ID du guess: ${data.guessed_id}`
-			);
+			alert(`Un essai a été envoyé avec succès. ID du guess: ${data.guessed_id}`);
 		} catch (error) {
 			console.error("Erreur lors de l'envoi du guess :", error);
 			alert("Erreur lors de l'envoi du guess");
@@ -99,115 +95,170 @@ const GuessFormComponent = () => {
 		setNames(newNames);
 	};
 
+	const handleGenderClick = (selectedGender: string) => {
+		setGender(selectedGender);
+	};
+
 	return (
-		<div>
-			<h2>Faites vos pronostics</h2>
-			<form onSubmit={handleSubmit}>
-				<label>
-					Genre :
-					<input
-						type="radio"
-						value="boy"
-						name="gender"
-						checked={gender === "boy"}
-						onChange={() => setGender("boy")}
-					/>{" "}
-					Garçon
-					<input
-						type="radio"
-						value="girl"
-						name="gender"
-						checked={gender === "girl"}
-						onChange={() => setGender("girl")}
-					/>{" "}
-					Fille
-				</label>
-				<br />
-				<label>
-					Poids (en Kg):
-					<input
-						type="text"
-						value={weight}
-						onChange={(e) => {
-							const value = e.target.value;
-							if (/^\d*\.?\d*$/.test(value)) {
-								setWeight(value);
-							}
-						}}
-					/>
-				</label>
-				<br />
-				<label>
-					Taille (en cm):
-					<input
-						type="number"
-						value={size}
-						onChange={(e) => {
-							const value = e.target.value;
-							if (/^\d*\.?\d*$/.test(value)) {
-								setSize(value);
-							}
-						}}
-					/>
-				</label>
-				<br />
-				<label>
-					Noms :
-					<table>
-						<thead>
-							<tr>
-								<th>Noms de fille</th>
-								<th>Noms de garçon</th>
-							</tr>
-						</thead>
-						<tbody>
-							{names.map((guess, index) => (
-								<tr key={index}>
-									<td>
-										<input
-											type="text"
-											value={guess.girlName}
-											onChange={(e) =>
-												handleInputChange(index, "girlName", e.target.value)
-											}
-											placeholder="Nom de fille"
-										/>
-									</td>
-									<td>
-										<input
-											type="text"
-											value={guess.boyName}
-											onChange={(e) =>
-												handleInputChange(index, "boyName", e.target.value)
-											}
-											placeholder="Nom de garçon"
-										/>
-									</td>
+		<div className="w-full max-w-lg mx-auto mt-8 bg-white p-6 rounded-lg shadow-lg">
+			<h2 className="text-xl font-semibold text-gray-800 mb-4">Faites vos pronostics</h2>
+			<form onSubmit={handleSubmit} className="space-y-12 pb-5">
+				<div>
+					<div className="flex items-center justify-center space-x-4 pt-5">
+						<div
+							className={`relative ${
+								gender === "boy" ? "scale-100 bg-yellow-400 rounded-xl" : "scale-50"
+							} transform transition-transform duration-200 ease-in-out`}
+							onClick={() => handleGenderClick("boy")}
+						>
+							<img
+								src="/mec.png"
+								alt="Garçon"
+								className="w-24 h-24 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out"
+							/>
+						</div>
+						<span className="text-gray-700">ou</span>
+						<div
+							className={`relative ${
+								gender === "girl" ? "scale-100  bg-yellow-400 rounded-xl" : "scale-50"
+							} transform transition-transform duration-200 ease-in-out`}
+							onClick={() => handleGenderClick("girl")}
+						>
+							<img
+								src="/meuf.png"
+								alt="Fille"
+								className="w-24 h-24 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out"
+							/>
+						</div>
+					</div>
+				</div>
+				<div>
+					<div className="flex items-center justify-center text-gray-700">
+						<img
+							src="/weight.png"
+							alt="Poid"
+							className="w-12 h-12 mr-6"
+						/>
+						<input
+							type="text"
+							value={weight}
+							onChange={(e) => {
+								const value = e.target.value;
+								if (/^\d*\.?\d*$/.test(value)) {
+									setWeight(value);
+								}
+							}}
+							className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
+						/>
+						<span className="mt-2 px-3 py-2">kg</span>
+					</div>
+				</div>
+				<div>
+					<div className="flex items-center justify-center text-gray-700">
+						<img
+							src="/height.png"
+							alt="Taille"
+							className="w-12 h-12 mr-6"
+						/>
+						<input
+							type="number"
+							value={size}
+							onChange={(e) => {
+								const value = e.target.value;
+								if (/^\d*\.?\d*$/.test(value)) {
+									setSize(value);
+								}
+							}}
+							className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
+						/>
+						<span className="mt-2 px-3 py-2">cm</span>
+					</div>
+				</div>
+				<div>
+					<div className="block text-gray-700">
+						
+						<div className="overflow-hidden rounded-lg border border-black mt-2">
+
+						<table className="w-full">
+							<thead>
+								<tr>
+									<th className="text-left border-b border-black px-2 py-1">
+										Prénoms de fille
+									</th>
+									<th className="text-left border-b border-black px-2 py-1">
+										Prénoms de garçon
+									</th>
 								</tr>
-							))}
-						</tbody>
-					</table>
-				</label>
-				<br />
-				<label>
-					Date de l'accouchement :
+							</thead>
+							<tbody>
+								{names.map((guess, index) => (
+									<tr key={index} className="font-crayon text-3xl bg-stone-800 text-slate-200 tracking-widest">
+										<td className=" border-r border-gray-600">
+											<input
+												type="text"
+												value={guess.girlName}
+												onChange={(e) =>
+													handleInputChange(index, "girlName", e.target.value)
+												}
+												placeholder="••••••••"
+												className=" w-full px-3 py-1 bg-stone-800"
+											/>
+										</td>
+										<td>
+											<input
+												type="text"
+												value={guess.boyName}
+												onChange={(e) =>
+													handleInputChange(index, "boyName", e.target.value)
+												}
+												placeholder="••••••••"
+												className="w-full px-3 bg-stone-800"
+												/>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+						</div>
+					</div>
+				</div>
+				<div>
+					<div className="flex items-center justify-center text-gray-700">
+					<img
+							src="/calendar.png"
+							alt="Date"
+							className="w-12 h-12 mr-6"
+						/>
+						<input
+							type="date"
+							value={date}
+							onChange={(e) => setDate(e.target.value)}
+							className="mt-2 px-3 py-2 w-40 bg-yellow-200 rounded-md"
+						/>
+					</div>
+				</div>
+				<div>
+					<div className="flex items-center justify-center text-gray-700">
+					<img
+							src="/clock.png"
+							alt="heure"
+							className="w-12 h-12 mr-6"
+						/>
+						<input
+							type="time"
+							value={time}
+							onChange={(e) => setTime(e.target.value)}
+							className="mt-2 w-40 px-3 py-2 bg-yellow-200 rounded-md"
+						/>
+					</div>
+				</div>
+				<div className="text-center">
 					<input
-						type="date"
-						value={date}
-						onChange={(e) => setDate(e.target.value)}
+						type="submit"
+						value="Enregistrer"
+						className="custom-button font-bold"
 					/>
-				</label>
-				<br />
-                <label>
-                    Heure de l'accouchement :
-                    <input
-                        type="time"
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                    />
-                </label>
-				<br />
-				<input type="submit" value="Enregistrer" className="custom-button" />
+				</div>
 			</form>
 		</div>
 	);
