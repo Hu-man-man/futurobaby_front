@@ -5,6 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useAuthHandlers } from "../../functions/authHandlers";
 import CountdownComponent from "../../components/CountdownComponent";
+// import { FooterComponent } from "@/app/components/FooterComponent";
 
 export default function HomePage() {
 	const [name, setName] = useState("");
@@ -94,6 +95,8 @@ export default function HomePage() {
 					</div>
 				</div>
 			)}
+			<div>foot</div>
+			{/* <FooterComponent /> */}
 		</main>
 	);
 }

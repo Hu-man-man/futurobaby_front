@@ -1,11 +1,10 @@
-
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import backendUrl from "@/backendUrl";
 
 const GuessFormComponent = () => {
 	const [gender, setGender] = useState<string>("");
-	const [weight, setWeight] = useState<string>("0,0");
+	const [weight, setWeight] = useState<string>("0.0");
 	const [size, setSize] = useState<string>("0");
 	const [names, setNames] = useState<{ girlName: string; boyName: string }[]>(
 		Array(5).fill({ girlName: "", boyName: "" })
@@ -43,7 +42,7 @@ const GuessFormComponent = () => {
 					}
 				}
 			} catch (error) {
-				console.error("Erreur lors de la récupération du guess:", error);
+				// console.error("Erreur lors de la récupération du guess:", error);
 			}
 		};
 
@@ -78,10 +77,12 @@ const GuessFormComponent = () => {
 			}
 
 			const data = await response.json();
-			alert(`Un essai a été envoyé avec succès. ID du guess: ${data.guessed_id}`);
+			// alert(
+			// 	`Un essai a été envoyé avec succès. ID du guess: ${data.guessed_id}`
+			// );
 		} catch (error) {
-			console.error("Erreur lors de l'envoi du guess :", error);
-			alert("Erreur lors de l'envoi du guess");
+			// console.error("Erreur lors de l'envoi du guess :", error);
+			alert("Erreur lors de l'enregistrement de votre supposition.");
 		}
 	};
 
@@ -101,13 +102,14 @@ const GuessFormComponent = () => {
 
 	return (
 		<div className="w-full max-w-lg mx-auto mt-8 bg-white p-6 rounded-lg shadow-lg">
-			<h2 className="text-xl font-semibold text-gray-800 mb-4">Faites vos pronostics</h2>
-			<form onSubmit={handleSubmit} className="space-y-12 pb-5">
+			<form onSubmit={handleSubmit} className="space-y-12 py-5">
 				<div>
 					<div className="flex items-center justify-center space-x-4 pt-5">
 						<div
 							className={`relative ${
-								gender === "boy" ? "scale-100 bg-yellow-400 rounded-xl" : "scale-50"
+								gender === "boy"
+									? "scale-100 bg-yellow-400 rounded-xl"
+									: "scale-50"
 							} transform transition-transform duration-200 ease-in-out`}
 							onClick={() => handleGenderClick("boy")}
 						>
@@ -120,7 +122,9 @@ const GuessFormComponent = () => {
 						<span className="text-gray-700">ou</span>
 						<div
 							className={`relative ${
-								gender === "girl" ? "scale-100  bg-yellow-400 rounded-xl" : "scale-50"
+								gender === "girl"
+									? "scale-100  bg-yellow-400 rounded-xl"
+									: "scale-50"
 							} transform transition-transform duration-200 ease-in-out`}
 							onClick={() => handleGenderClick("girl")}
 						>
@@ -134,11 +138,7 @@ const GuessFormComponent = () => {
 				</div>
 				<div>
 					<div className="flex items-center justify-center text-gray-700">
-						<img
-							src="/weight.png"
-							alt="Poid"
-							className="w-12 h-12 mr-6"
-						/>
+						<img src="/weight.png" alt="Poid" className="w-12 h-12 mr-6" />
 						<input
 							type="text"
 							value={weight}
@@ -155,17 +155,13 @@ const GuessFormComponent = () => {
 				</div>
 				<div>
 					<div className="flex items-center justify-center text-gray-700">
-						<img
-							src="/height.png"
-							alt="Taille"
-							className="w-12 h-12 mr-6"
-						/>
+						<img src="/height.png" alt="Taille" className="w-12 h-12 mr-6" />
 						<input
-							type="number"
+							type="text"
 							value={size}
 							onChange={(e) => {
 								const value = e.target.value;
-								if (/^\d*\.?\d*$/.test(value)) {
+								if (/^\d*$/.test(value) && parseInt(value) <= 100) {
 									setSize(value);
 								}
 							}}
@@ -176,59 +172,56 @@ const GuessFormComponent = () => {
 				</div>
 				<div>
 					<div className="block text-gray-700">
-						
 						<div className="overflow-hidden rounded-lg border border-black mt-2">
-
-						<table className="w-full">
-							<thead>
-								<tr>
-									<th className="text-left border-b border-black px-2 py-1">
-										Prénoms de fille
-									</th>
-									<th className="text-left border-b border-black px-2 py-1">
-										Prénoms de garçon
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								{names.map((guess, index) => (
-									<tr key={index} className="font-crayon text-3xl bg-stone-800 text-slate-200 tracking-widest">
-										<td className=" border-r border-gray-600">
-											<input
-												type="text"
-												value={guess.girlName}
-												onChange={(e) =>
-													handleInputChange(index, "girlName", e.target.value)
-												}
-												placeholder="••••••••"
-												className=" w-full px-3 py-1 bg-stone-800"
-											/>
-										</td>
-										<td>
-											<input
-												type="text"
-												value={guess.boyName}
-												onChange={(e) =>
-													handleInputChange(index, "boyName", e.target.value)
-												}
-												placeholder="••••••••"
-												className="w-full px-3 bg-stone-800"
-												/>
-										</td>
+							<table className="w-full">
+								<thead>
+									<tr>
+										<th className="text-left border-b border-black px-2 py-1">
+											Prénoms de fille
+										</th>
+										<th className="text-left border-b border-black px-2 py-1">
+											Prénoms de garçon
+										</th>
 									</tr>
-								))}
-							</tbody>
-						</table>
+								</thead>
+								<tbody>
+									{names.map((guess, index) => (
+										<tr
+											key={index}
+											className="font-crayon text-3xl bg-stone-800 text-slate-200 tracking-widest"
+										>
+											<td className=" border-r border-gray-600">
+												<input
+													type="text"
+													value={guess.girlName}
+													onChange={(e) =>
+														handleInputChange(index, "girlName", e.target.value)
+													}
+													placeholder="••••••••"
+													className=" w-full px-3 py-1 bg-stone-800"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													value={guess.boyName}
+													onChange={(e) =>
+														handleInputChange(index, "boyName", e.target.value)
+													}
+													placeholder="••••••••"
+													className="w-full px-3 bg-stone-800"
+												/>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
 				<div>
 					<div className="flex items-center justify-center text-gray-700">
-					<img
-							src="/calendar.png"
-							alt="Date"
-							className="w-12 h-12 mr-6"
-						/>
+						<img src="/calendar.png" alt="Date" className="w-12 h-12 mr-6" />
 						<input
 							type="date"
 							value={date}
@@ -239,11 +232,7 @@ const GuessFormComponent = () => {
 				</div>
 				<div>
 					<div className="flex items-center justify-center text-gray-700">
-					<img
-							src="/clock.png"
-							alt="heure"
-							className="w-12 h-12 mr-6"
-						/>
+						<img src="/clock.png" alt="heure" className="w-12 h-12 mr-6" />
 						<input
 							type="time"
 							value={time}
