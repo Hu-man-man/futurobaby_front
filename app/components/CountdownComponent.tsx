@@ -37,21 +37,21 @@ const CountdownComponent = ({ targetDate }: CountdownProps) => {
 
 	return (
 		<div className="text-center p-6 border-b-8 border-black border-dotted pb-10 mb-11">
-			<h1 className="text-2xl mb-6 font-arista">
-				pronistics sur <br/><span className="text-8xl">Bubulle</span>
+			<h1 className="text-3xl sm:text-4xl mb-6 font-arista">
+				pronostics sur <br/><span className="text-8xl sm:text-9xl">Bubulle</span>
 			</h1>
-            <h3>naissance théorique</h3>
-            <div className="flex justify-center space-x-8 pt-1">
+            <h3 className="text-sm sm:text-base md:text-lg">naissance théorique</h3>
+            <div className="flex flex-wrap justify-center space-x-4 sm:space-x-6 md:space-x-8 pt-1">
 				{Object.entries(timeLeft).map(([key, value]) => (
-					<div key={key} className="flex flex-col items-center mx-4">
-						<span className="text-2xl text-white font-bold rounded-full aspect-square w-12 flex items-center justify-center bg-yellow-400">
+					<div key={key} className="flex flex-col items-center mx-2 sm:mx-4">
+						<span className="text-base sm:text-lg md:text-xl lg:text-2xl text-white font-bold rounded-full aspect-square w-10 sm:w-12 md:w-14 lg:w-16 flex items-center justify-center bg-yellow-400">
 							{value}
 						</span>
-						<span className="text-gray-500">{key}</span>
+						<span className="text-xs sm:text-sm md:text-base text-gray-500">{key}</span>
 					</div>
 				))}
 				{Object.values(timeLeft).every((val) => val === 0) && (
-					<span>ça va pas tarder</span>
+					<span className="text-xs sm:text-sm md:text-base">ça va pas tarder</span>
 				)}
 			</div>
 		</div>

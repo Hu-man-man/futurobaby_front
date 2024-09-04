@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import backendUrl from "@/backendUrl";
@@ -176,10 +178,10 @@ const GuessFormComponent = () => {
 							<table className="w-full">
 								<thead>
 									<tr>
-										<th className="text-left border-b border-black px-2 py-1">
+										<th className="text-left border-b border-black p-2 py-1 text-xs sm:text-base">
 											Prénoms de fille
 										</th>
-										<th className="text-left border-b border-black px-2 py-1">
+										<th className="text-left border-b border-black p-2 py-1 text-xs sm:text-base">
 											Prénoms de garçon
 										</th>
 									</tr>

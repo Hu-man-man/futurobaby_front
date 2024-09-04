@@ -25,7 +25,7 @@ export function useAuthHandlers() {
 						"userData",
 						JSON.stringify({ token: data.token, userName: data.userName })
 					);
-					alert(data.message);
+					// alert(data.message);
 					router.push("pages/session");
 				} else {
 					alert(data.message);
@@ -33,7 +33,7 @@ export function useAuthHandlers() {
 				}
 			})
 			.catch((error) => {
-				console.error("Fetch Error:", error);
+				// console.error("Fetch Error:", error);
 				alert(`Erreur lors de la connexion: ${error.message}`);
 			});
 	};
@@ -65,7 +65,7 @@ export function useAuthHandlers() {
 				}
 			})
 			.catch((error) => {
-				console.error("Fetch Error:", error);
+				// console.error("Fetch Error:", error);
 				alert(`Erreur lors de la création du compte: ${error.message}`);
 			});
 	};

@@ -44,7 +44,7 @@ export default function HomePage() {
 	};
 
 	return (
-		<main className="flex min-h-screen flex-col items-center text-center justify-between p-24">
+		<main className="flex min-h-screen flex-col items-center text-center justify-between md:p-24">
 			<CountdownComponent targetDate={targetDate} />
 			{token ? (
 				<div>{loading && "Veuillez patienter..."}</div>
@@ -95,7 +95,6 @@ export default function HomePage() {
 					</div>
 				</div>
 			)}
-			<div>foot</div>
 			{/* <FooterComponent /> */}
 		</main>
 	);
