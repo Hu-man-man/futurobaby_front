@@ -1,19 +1,19 @@
-"use client";
+
+"use client"
 
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useAuthHandlers } from "../../functions/authHandlers";
 import CountdownComponent from "../../components/CountdownComponent";
-// import { FooterComponent } from "@/app/components/FooterComponent";
 
 export default function HomePage() {
 	const [name, setName] = useState("");
 	const [password, setPassword] = useState("");
-	const [email, setEmail] = useState(""); // Nouvel état pour l'email
-	const [isLoginMode, setIsLoginMode] = useState(false); // État pour gérer le mode actuel
+	const [email, setEmail] = useState(""); 
+	const [isLoginMode, setIsLoginMode] = useState(false); 
 	const [loading, setLoading] = useState(false);
-	const { token, setToken } = useAuth();
+	const { token } = useAuth();
 	const router = useRouter();
 	const { handleOnSignin, handleOnSignup } = useAuthHandlers();
 
@@ -25,22 +25,27 @@ export default function HomePage() {
 
 	const targetDate = "2024-10-26T12:00:00";
 
-	const handleChangePage = () => {
-		setLoading(true);
-		router.push("pages/session");
-		setLoading(false);
-	};
-
 	const toggleMode = () => {
-		setIsLoginMode((prev) => !prev); // Basculer entre le mode connexion et inscription
+		setIsLoginMode((prev) => !prev); 
 	};
 
 	const handleSubmit = () => {
+		if (!isLoginMode && !validateEmail(email)) {
+			alert("Veuillez entrer une adresse e-mail valide.");
+			return;
+		}
+
 		if (isLoginMode) {
 			handleOnSignin(name, password);
 		} else {
 			handleOnSignup(name, password, email);
 		}
+	};
+
+	const validateEmail = (email: string) => {
+		// Regex de validation d'adresse e-mail
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return emailRegex.test(email);
 	};
 
 	return (
@@ -49,12 +54,11 @@ export default function HomePage() {
 			{token ? (
 				<div>{loading && "Veuillez patienter..."}</div>
 			) : (
-				// <div className="w-96 h-auto bg-slate-400 p-11 *:m-2">
 				<div className="w-96 h-auto p-11 *:m-2">
 					<h2 className="text-3xl font-bold">
 						{isLoginMode ? "Se connecter" : "Créer un compte"}
 					</h2>
-					<p>{!isLoginMode && "Pour être tenu au courant de la naissance et faire des pronistics"}</p>
+					<p>{!isLoginMode && "Pour être tenu au courant de la naissance et faire des pronostics"}</p>
 					<input
 						className="bg-yellow-200 p-1"
 						type="text"
@@ -95,7 +99,6 @@ export default function HomePage() {
 					</div>
 				</div>
 			)}
-			{/* <FooterComponent /> */}
 		</main>
 	);
 }

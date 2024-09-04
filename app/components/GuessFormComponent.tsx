@@ -16,7 +16,7 @@ const GuessFormComponent = () => {
 	const [time, setTime] = useState<string>("12:00");
 	const { token } = useAuth();
 	const [hasGuess, setHasGuess] = useState<boolean>(false);  // Pour savoir si une suggestion existe
-	const [isEditing, setIsEditing] = useState<boolean>(false);  // Pour gérer le mode d'édition
+	const [isEditing, setIsEditing] = useState<boolean>(true);  // Pour gérer le mode d'édition
 
 	useEffect(() => {
 		const fetchExistingGuess = async () => {
@@ -46,6 +46,7 @@ const GuessFormComponent = () => {
 						setTime(localTime);
 						
 						setHasGuess(true);  // Une suggestion existe déjà
+						setIsEditing(false)
 					}
 				}
 			} catch (error) {
