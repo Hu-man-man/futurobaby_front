@@ -104,11 +104,11 @@ const GuessFormComponent = () => {
 	};
 
 	const handleGenderClick = (selectedGender: string) => {
-		setGender(selectedGender);
+		if (isEditing) setGender(selectedGender);
 	};
 
 	return (
-		<div className={`w-full max-w-lg mx-auto mt-8 ${isEditing ?  "bg-white" : "bg-neutral-200" } bg-white p-6 rounded-lg shadow-lg`}>
+		<div className={`w-full max-w-lg mx-auto mt-8 ${isEditing ?  "bg-white" : "bg-neutral-400" } duration-200 ease-in-out p-6 rounded-lg shadow-lg`}>
 			{hasGuess && !isEditing && (
 				<div className="text-center mb-4">
 					<button
