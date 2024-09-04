@@ -1,4 +1,5 @@
-"use client"
+
+"use client";
 
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
@@ -14,6 +15,8 @@ const GuessFormComponent = () => {
 	const [date, setDate] = useState<string>("2024-10-26");
 	const [time, setTime] = useState<string>("12:00");
 	const { token } = useAuth();
+	const [hasGuess, setHasGuess] = useState<boolean>(false);  // Pour savoir si une suggestion existe
+	const [isEditing, setIsEditing] = useState<boolean>(false);  // Pour gérer le mode d'édition
 
 	useEffect(() => {
 		const fetchExistingGuess = async () => {
@@ -41,6 +44,8 @@ const GuessFormComponent = () => {
 							.substring(0, 5);
 						setDate(localDate);
 						setTime(localTime);
+						
+						setHasGuess(true);  // Une suggestion existe déjà
 					}
 				}
 			} catch (error) {
@@ -79,9 +84,9 @@ const GuessFormComponent = () => {
 			}
 
 			const data = await response.json();
-			// alert(
-			// 	`Un essai a été envoyé avec succès. ID du guess: ${data.guessed_id}`
-			// );
+			
+			setHasGuess(true);  // Après enregistrement, une suggestion existe maintenant
+			setIsEditing(false);  // Désactiver le mode édition après l'enregistrement
 		} catch (error) {
 			// console.error("Erreur lors de l'envoi du guess :", error);
 			alert("Erreur lors de l'enregistrement de votre supposition.");
@@ -103,7 +108,17 @@ const GuessFormComponent = () => {
 	};
 
 	return (
-		<div className="w-full max-w-lg mx-auto mt-8 bg-white p-6 rounded-lg shadow-lg">
+		<div className={`w-full max-w-lg mx-auto mt-8 ${isEditing ?  "bg-white" : "bg-neutral-200" } bg-white p-6 rounded-lg shadow-lg`}>
+			{hasGuess && !isEditing && (
+				<div className="text-center mb-4">
+					<button
+						onClick={() => setIsEditing(true)}
+						className="custom-button font-bold"
+					>
+						Modifier la suggestion
+					</button>
+				</div>
+			)}
 			<form onSubmit={handleSubmit} className="space-y-12 py-5">
 				<div>
 					<div className="flex items-center justify-center space-x-4 pt-5">
@@ -118,7 +133,9 @@ const GuessFormComponent = () => {
 							<img
 								src="/mec.png"
 								alt="Garçon"
-								className="w-24 h-24 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out"
+								className={`w-24 h-24 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out ${
+									!isEditing && "pointer-events-none opacity-50"
+								}`}
 							/>
 						</div>
 						<span className="text-gray-700">ou</span>
@@ -133,7 +150,9 @@ const GuessFormComponent = () => {
 							<img
 								src="/meuf.png"
 								alt="Fille"
-								className="w-24 h-24 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out"
+								className={`w-24 h-24 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out ${
+									!isEditing && "pointer-events-none opacity-50"
+								}`}
 							/>
 						</div>
 					</div>
@@ -150,6 +169,7 @@ const GuessFormComponent = () => {
 									setWeight(value);
 								}
 							}}
+							disabled={!isEditing}
 							className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
 						/>
 						<span className="mt-2 px-3 py-2">kg</span>
@@ -167,6 +187,7 @@ const GuessFormComponent = () => {
 									setSize(value);
 								}
 							}}
+							disabled={!isEditing}
 							className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
 						/>
 						<span className="mt-2 px-3 py-2">cm</span>
@@ -200,7 +221,8 @@ const GuessFormComponent = () => {
 														handleInputChange(index, "girlName", e.target.value)
 													}
 													placeholder="••••••••"
-													className=" w-full px-3 py-1 bg-stone-800"
+													disabled={!isEditing}
+													className="w-full px-3 py-1 bg-stone-800"
 												/>
 											</td>
 											<td>
@@ -211,6 +233,7 @@ const GuessFormComponent = () => {
 														handleInputChange(index, "boyName", e.target.value)
 													}
 													placeholder="••••••••"
+													disabled={!isEditing}
 													className="w-full px-3 bg-stone-800"
 												/>
 											</td>
@@ -228,6 +251,7 @@ const GuessFormComponent = () => {
 							type="date"
 							value={date}
 							onChange={(e) => setDate(e.target.value)}
+							disabled={!isEditing}
 							className="mt-2 px-3 py-2 w-40 bg-yellow-200 rounded-md"
 						/>
 					</div>
@@ -239,20 +263,24 @@ const GuessFormComponent = () => {
 							type="time"
 							value={time}
 							onChange={(e) => setTime(e.target.value)}
+							disabled={!isEditing}
 							className="mt-2 w-40 px-3 py-2 bg-yellow-200 rounded-md"
 						/>
 					</div>
 				</div>
-				<div className="text-center">
-					<input
-						type="submit"
-						value="Enregistrer"
-						className="custom-button font-bold"
-					/>
-				</div>
+				{(!hasGuess || isEditing) && (
+					<div className="text-center">
+						<input
+							type="submit"
+							value="Enregistrer"
+							className="custom-button font-bold"
+						/>
+					</div>
+				)}
 			</form>
 		</div>
 	);
 };
 
 export default GuessFormComponent;
+
