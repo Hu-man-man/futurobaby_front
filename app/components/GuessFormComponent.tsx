@@ -289,5 +289,5 @@ const GuessFormComponent = () => {
 	);
 };
 
-export default GuessFormComponent;
+export default GuessFormComponent
 
