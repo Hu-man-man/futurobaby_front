@@ -17,6 +17,7 @@ const GuessFormComponent = () => {
 	const { token } = useAuth();
 	const [hasGuess, setHasGuess] = useState<boolean>(false);  // Pour savoir si une suggestion existe
 	const [isEditing, setIsEditing] = useState<boolean>(true);  // Pour gérer le mode d'édition
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchExistingGuess = async () => {
@@ -58,6 +59,7 @@ const GuessFormComponent = () => {
 	}, [token]);
 
 	const handleSubmit = async (event: React.FormEvent) => {
+		setLoading(true)
 		event.preventDefault();
 
 		const dateTime = `${date} ${time}:00`;
@@ -82,15 +84,18 @@ const GuessFormComponent = () => {
 
 			if (!response.ok) {
 				throw new Error(`Erreur HTTP: ${response.status}`);
+				setLoading(false);
 			}
 
 			const data = await response.json();
 			
 			setHasGuess(true);  // Après enregistrement, une suggestion existe maintenant
 			setIsEditing(false);  // Désactiver le mode édition après l'enregistrement
+			setLoading(false);
 		} catch (error) {
 			// console.error("Erreur lors de l'envoi du guess :", error);
 			alert("Erreur lors de l'enregistrement de votre supposition.");
+			setLoading(false);
 		}
 	};
 
@@ -269,7 +274,8 @@ const GuessFormComponent = () => {
 						/>
 					</div>
 				</div>
-				{(!hasGuess || isEditing) && (
+				{ loading ? (<div className="text-center">Veillez patienter...</div>) : 
+				(!hasGuess || isEditing) && (
 					<div className="text-center">
 						<input
 							type="submit"

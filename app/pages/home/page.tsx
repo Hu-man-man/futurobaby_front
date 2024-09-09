@@ -30,15 +30,19 @@ export default function HomePage() {
 	};
 
 	const handleSubmit = () => {
+		setLoading(true)
 		if (!isLoginMode && !validateEmail(email)) {
 			alert("Veuillez entrer une adresse e-mail valide.");
+			setLoading(false)
 			return;
 		}
 
 		if (isLoginMode) {
 			handleOnSignin(name, password);
+			setLoading(false)
 		} else {
 			handleOnSignup(name, password, email);
+			setLoading(false)
 		}
 	};
 
