@@ -1,5 +1,4 @@
-
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
@@ -10,8 +9,8 @@ import CountdownComponent from "../../components/CountdownComponent";
 export default function HomePage() {
 	const [name, setName] = useState("");
 	const [password, setPassword] = useState("");
-	const [email, setEmail] = useState(""); 
-	const [isLoginMode, setIsLoginMode] = useState(false); 
+	const [email, setEmail] = useState("");
+	const [isLoginMode, setIsLoginMode] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const { token } = useAuth();
 	const router = useRouter();
@@ -26,23 +25,35 @@ export default function HomePage() {
 	const targetDate = "2024-10-26T12:00:00";
 
 	const toggleMode = () => {
-		setIsLoginMode((prev) => !prev); 
+		setIsLoginMode((prev) => !prev);
 	};
 
-	const handleSubmit = () => {
-		setLoading(true)
+	const handleSubmit = async () => {
+		setLoading(true);
 		if (!isLoginMode && !validateEmail(email)) {
 			alert("Veuillez entrer une adresse e-mail valide.");
-			setLoading(false)
+			setLoading(false);
 			return;
 		}
 
-		if (isLoginMode) {
-			handleOnSignin(name, password);
-			setLoading(false)
-		} else {
-			handleOnSignup(name, password, email);
-			setLoading(false)
+		// if (isLoginMode) {
+		// 	handleOnSignin(name, password);
+		// 	setLoading(false);
+		// } else {
+		// 	handleOnSignup(name, password, email);
+		// 	setLoading(false);
+		// }
+		try {
+			if (isLoginMode) {
+				await handleOnSignin(name, password);  // Attendre que l'opération se termine
+			} else {
+				await handleOnSignup(name, password, email);  // Attendre que l'opération se termine
+			}
+		} catch (error) {
+			console.error("Erreur lors de l'authentification:", error);
+			alert("Une erreur est survenue.");
+		} finally {
+			setLoading(false);  // Désactive le loading après la fin de la requête, succès ou erreur
 		}
 	};
 
@@ -62,7 +73,10 @@ export default function HomePage() {
 					<h2 className="text-3xl font-bold">
 						{isLoginMode ? "Se connecter" : "Créer un compte"}
 					</h2>
-					<p>{!isLoginMode && "Pour être tenu au courant de la naissance et faire des pronostics"}</p>
+					<p>
+						{!isLoginMode &&
+							"Pour être tenu au courant de la naissance et faire des pronostics"}
+					</p>
 					<input
 						className="bg-yellow-200 p-1"
 						type="text"
@@ -92,9 +106,13 @@ export default function HomePage() {
 							required
 						/>
 					)}
-					<div className="custom-button">
-						<input type="button" value="Valider" onClick={handleSubmit} />
-					</div>
+					{loading ? (
+						<div className="">Veuillez patienter...</div>
+					) : (
+						<div className="custom-button">
+							<input type="button" value="Valider" onClick={handleSubmit} />
+						</div>
+					)}
 					<div
 						className=" text-slate-500 hover:text-black hover:cursor-pointer pt-10"
 						onClick={toggleMode}
