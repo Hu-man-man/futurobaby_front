@@ -1,11 +1,20 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import backendUrl from "@/backendUrl";
+import { useIsBorn } from "../context/IsBornContext";
 
-const GuessFormComponent = () => {
+
+interface Guess {
+	guessed_gender: string;
+	guessed_weight: number;
+	guessed_size: number;
+	guessed_names: { girlName: string; boyName: string }[];
+	guessed_birthdate: string;
+}
+
+const GuessFormComponent = ({ currentGuess }: { currentGuess: Guess | null }) => {
 	const [gender, setGender] = useState<string>("");
 	const [weight, setWeight] = useState<string>("0.0");
 	const [size, setSize] = useState<string>("0");
@@ -15,48 +24,30 @@ const GuessFormComponent = () => {
 	const [date, setDate] = useState<string>("2024-10-26");
 	const [time, setTime] = useState<string>("12:00");
 	const { token } = useAuth();
-	const [hasGuess, setHasGuess] = useState<boolean>(false);  // Pour savoir si une suggestion existe
-	const [isEditing, setIsEditing] = useState<boolean>(true);  // Pour gérer le mode d'édition
+	const [hasGuess, setHasGuess] = useState<boolean>(false); // Pour savoir si une suggestion existe
+	const [isEditing, setIsEditing] = useState<boolean>(true); // Pour gérer le mode d'édition
 	const [loading, setLoading] = useState(false);
+	const { isBorn } = useIsBorn();
 
 	useEffect(() => {
-		const fetchExistingGuess = async () => {
-			try {
-				const response = await fetch(`${backendUrl}/guesses/current`, {
-					method: "GET",
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				});
+		// Si un guess existe déjà dans les props, remplis les champs du formulaire
+		if (currentGuess) {
+			setGender(currentGuess.guessed_gender);
+			setWeight(currentGuess.guessed_weight.toString());
+			setSize(currentGuess.guessed_size.toString());
+			setNames(currentGuess.guessed_names);
 
-				if (response.ok) {
-					const data = await response.json();
-					if (data.guess) {
-						setGender(data.guess.guessed_gender);
-						setWeight(data.guess.guessed_weight.toString());
-						setSize(data.guess.guessed_size.toString());
-						setNames(data.guess.guessed_names);
+			const utcDate = new Date(currentGuess.guessed_birthdate);
+			const localDate = utcDate.toISOString().split("T")[0];
+			const localTime = utcDate.toTimeString().split(" ")[0].substring(0, 5);
+			setDate(localDate);
+			setTime(localTime);
 
-						const utcDate = new Date(data.guess.guessed_birthdate);
-						const localDate = utcDate.toISOString().split("T")[0];
-						const localTime = utcDate
-							.toTimeString()
-							.split(" ")[0]
-							.substring(0, 5);
-						setDate(localDate);
-						setTime(localTime);
-						
-						setHasGuess(true);  // Une suggestion existe déjà
-						setIsEditing(false)
-					}
-				}
-			} catch (error) {
-				// console.error("Erreur lors de la récupération du guess:", error);
-			}
-		};
-
-		fetchExistingGuess();
-	}, [token]);
+			setHasGuess(true); // Une suggestion existe déjà
+			setIsEditing(false); // Désactive le mode d'édition si le guess existe
+		}
+		console.log(isBorn)
+	}, [currentGuess]);
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		setLoading(true)
@@ -115,7 +106,7 @@ const GuessFormComponent = () => {
 
 	return (
 		<div className={`w-full max-w-lg mx-auto mt-8 ${isEditing ?  "bg-white" : "bg-neutral-400" } duration-200 ease-in-out p-6 rounded-lg shadow-lg`}>
-			{hasGuess && !isEditing && (
+			{hasGuess && !isEditing && isBorn === 'false' && (
 				<div className="text-center mb-4">
 					<button
 						onClick={() => setIsEditing(true)}
@@ -161,6 +152,7 @@ const GuessFormComponent = () => {
 								}`}
 							/>
 						</div>
+						{/* <div className="flex float-end"><div className="font-bold border-white border-2 text-white rounded-full aspect-square w-12 flex items-center justify-center">2/5</div></div> */}
 					</div>
 				</div>
 				<div>
@@ -179,6 +171,7 @@ const GuessFormComponent = () => {
 							className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
 						/>
 						<span className="mt-2 px-3 py-2">kg</span>
+					{/* <div className="flex float-end"><div className="font-bold bg-white border-black border-2 rounded-full aspect-square w-12 flex items-center justify-center">2/5</div></div> */}
 					</div>
 				</div>
 				<div>

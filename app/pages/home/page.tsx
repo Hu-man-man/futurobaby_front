@@ -36,13 +36,6 @@ export default function HomePage() {
 			return;
 		}
 
-		// if (isLoginMode) {
-		// 	handleOnSignin(name, password);
-		// 	setLoading(false);
-		// } else {
-		// 	handleOnSignup(name, password, email);
-		// 	setLoading(false);
-		// }
 		try {
 			if (isLoginMode) {
 				await handleOnSignin(name, password);  // Attendre que l'opération se termine
@@ -114,7 +107,7 @@ export default function HomePage() {
 						</div>
 					)}
 					<div
-						className=" text-slate-500 hover:text-black hover:cursor-pointer pt-10"
+						className=" text-slate-500 hover:text-black hover:cursor-pointer pt-4"
 						onClick={toggleMode}
 					>
 						{isLoginMode ? "Créer un compte" : "Se connecter"}
