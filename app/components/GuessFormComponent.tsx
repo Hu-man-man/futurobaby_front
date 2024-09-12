@@ -5,7 +5,6 @@ import { useAuth } from "../context/AuthContext";
 import backendUrl from "@/backendUrl";
 import { useIsBorn } from "../context/IsBornContext";
 
-
 interface Guess {
 	guessed_gender: string;
 	guessed_weight: number;
@@ -14,7 +13,11 @@ interface Guess {
 	guessed_birthdate: string;
 }
 
-const GuessFormComponent = ({ currentGuess }: { currentGuess: Guess | null }) => {
+const GuessFormComponent = ({
+	currentGuess,
+}: {
+	currentGuess: Guess | null;
+}) => {
 	const [gender, setGender] = useState<string>("");
 	const [weight, setWeight] = useState<string>("0.0");
 	const [size, setSize] = useState<string>("0");
@@ -27,6 +30,7 @@ const GuessFormComponent = ({ currentGuess }: { currentGuess: Guess | null }) =>
 	const [hasGuess, setHasGuess] = useState<boolean>(false); // Pour savoir si une suggestion existe
 	const [isEditing, setIsEditing] = useState<boolean>(true); // Pour gérer le mode d'édition
 	const [loading, setLoading] = useState(false);
+	const [scores, setScores] = useState<any>(null); // État pour les scores
 	const { isBorn } = useIsBorn();
 
 	useEffect(() => {
@@ -46,11 +50,34 @@ const GuessFormComponent = ({ currentGuess }: { currentGuess: Guess | null }) =>
 			setHasGuess(true); // Une suggestion existe déjà
 			setIsEditing(false); // Désactive le mode d'édition si le guess existe
 		}
-		console.log(isBorn)
-	}, [currentGuess]);
+		// Appel API pour récupérer les scores si le bébé est né
+		if (isBorn === "true") {
+			const fetchScores = async () => {
+				try {
+					const response = await fetch(`${backendUrl}/babyIsBorn/scores`, {
+						method: "GET",
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					});
+
+					if (!response.ok) {
+						throw new Error(`Erreur HTTP: ${response.status}`);
+					}
+
+					const data = await response.json();
+					setScores(data.scores); // Stocker les scores dans l'état
+				} catch (error) {
+					console.error("Erreur lors de la récupération des scores :", error);
+				}
+			};
+
+			fetchScores();
+		}
+	}, [currentGuess, isBorn, token]);
 
 	const handleSubmit = async (event: React.FormEvent) => {
-		setLoading(true)
+		setLoading(true);
 		event.preventDefault();
 
 		const dateTime = `${date} ${time}:00`;
@@ -74,14 +101,14 @@ const GuessFormComponent = ({ currentGuess }: { currentGuess: Guess | null }) =>
 			});
 
 			if (!response.ok) {
-				throw new Error(`Erreur HTTP: ${response.status}`);
 				setLoading(false);
+				throw new Error(`Erreur HTTP: ${response.status}`);
 			}
 
 			const data = await response.json();
-			
-			setHasGuess(true);  // Après enregistrement, une suggestion existe maintenant
-			setIsEditing(false);  // Désactiver le mode édition après l'enregistrement
+
+			setHasGuess(true); // Après enregistrement, une suggestion existe maintenant
+			setIsEditing(false); // Désactiver le mode édition après l'enregistrement
 			setLoading(false);
 		} catch (error) {
 			// console.error("Erreur lors de l'envoi du guess :", error);
@@ -104,9 +131,30 @@ const GuessFormComponent = ({ currentGuess }: { currentGuess: Guess | null }) =>
 		if (isEditing) setGender(selectedGender);
 	};
 
+	const ScoreDisplay = ({
+		score,
+		maxScore,
+	}: {
+		score: number;
+		maxScore: number;
+	}) => {
+		if (isBorn === "true") {
+			return (
+				<div className="font-bold border-white border-2 text-white rounded-full aspect-square w-12 flex items-center justify-center">
+					{score ?? "N/A"}/{maxScore} {/* Affiche "N/A" si score est null */}
+				</div>
+			);
+		}
+		return null;
+	};
+
 	return (
-		<div className={`w-full max-w-lg mx-auto mt-8 ${isEditing ?  "bg-white" : "bg-neutral-400" } duration-200 ease-in-out p-6 rounded-lg shadow-lg`}>
-			{hasGuess && !isEditing && isBorn === 'false' && (
+		<div
+			className={`w-full max-w-lg mx-auto mt-8 ${
+				isEditing ? "bg-white" : "bg-neutral-400"
+			} duration-200 ease-in-out p-6 rounded-lg shadow-lg`}
+		>
+			{hasGuess && !isEditing && isBorn === "false" && (
 				<div className="text-center mb-4">
 					<button
 						onClick={() => setIsEditing(true)}
@@ -152,7 +200,11 @@ const GuessFormComponent = ({ currentGuess }: { currentGuess: Guess | null }) =>
 								}`}
 							/>
 						</div>
-						{/* <div className="flex float-end"><div className="font-bold border-white border-2 text-white rounded-full aspect-square w-12 flex items-center justify-center">2/5</div></div> */}
+						<div className="float-end">
+							{scores && (
+								<ScoreDisplay score={scores.score_gender} maxScore={2} />
+							)}
+						</div>
 					</div>
 				</div>
 				<div>
@@ -171,7 +223,11 @@ const GuessFormComponent = ({ currentGuess }: { currentGuess: Guess | null }) =>
 							className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
 						/>
 						<span className="mt-2 px-3 py-2">kg</span>
-					{/* <div className="flex float-end"><div className="font-bold bg-white border-black border-2 rounded-full aspect-square w-12 flex items-center justify-center">2/5</div></div> */}
+						<div className="text-center mb-4">
+							{scores && (
+								<ScoreDisplay score={scores.score_weight} maxScore={2} />
+							)}
+						</div>
 					</div>
 				</div>
 				<div>
@@ -190,6 +246,11 @@ const GuessFormComponent = ({ currentGuess }: { currentGuess: Guess | null }) =>
 							className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
 						/>
 						<span className="mt-2 px-3 py-2">cm</span>
+						<div className="float-end">
+							{scores && (
+								<ScoreDisplay score={scores.score_size} maxScore={2} />
+							)}
+						</div>
 					</div>
 				</div>
 				<div>
@@ -241,6 +302,11 @@ const GuessFormComponent = ({ currentGuess }: { currentGuess: Guess | null }) =>
 								</tbody>
 							</table>
 						</div>
+						<div className="float-end">
+							{scores && (
+								<ScoreDisplay score={scores.score_names} maxScore={2} />
+							)}
+						</div>
 					</div>
 				</div>
 				<div>
@@ -253,6 +319,11 @@ const GuessFormComponent = ({ currentGuess }: { currentGuess: Guess | null }) =>
 							disabled={!isEditing}
 							className="mt-2 px-3 py-2 w-40 bg-yellow-200 rounded-md"
 						/>
+						<div className="float-end">
+							{scores && (
+								<ScoreDisplay score={scores.score_date} maxScore={2} />
+							)}
+						</div>
 					</div>
 				</div>
 				<div>
@@ -265,22 +336,34 @@ const GuessFormComponent = ({ currentGuess }: { currentGuess: Guess | null }) =>
 							disabled={!isEditing}
 							className="mt-2 w-40 px-3 py-2 bg-yellow-200 rounded-md"
 						/>
+						<div className="float-end">
+							{scores && (
+								<ScoreDisplay score={scores.score_time} maxScore={2} />
+							)}
+						</div>
 					</div>
+					<div className="float-end">
+							{scores && (
+								<><span>Ton total : </span><ScoreDisplay score={scores.total_score} maxScore={2} /></>
+							)}
+						</div>
 				</div>
-				{ loading ? (<div className="text-center">Veillez patienter...</div>) : 
-				(!hasGuess || isEditing) && (
-					<div className="text-center">
-						<input
-							type="submit"
-							value="Enregistrer"
-							className="custom-button font-bold"
-						/>
-					</div>
+				{loading ? (
+					<div className="text-center">Veillez patienter...</div>
+				) : (
+					(!hasGuess || isEditing) && (
+						<div className="text-center">
+							<input
+								type="submit"
+								value="Enregistrer"
+								className="custom-button font-bold"
+							/>
+						</div>
+					)
 				)}
 			</form>
 		</div>
 	);
 };
 
-export default GuessFormComponent
-
+export default GuessFormComponent;

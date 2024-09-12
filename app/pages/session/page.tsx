@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 import GuessFormComponent from "../../components/GuessFormComponent";
 import CountdownComponent from "@/app/components/CountdownComponent";
+import BabyStatsComponent from "@/app/components/BabyStatsComponent";
 import { useIsBorn } from "@/app/context/IsBornContext";
 import backendUrl from "@/backendUrl";
 
@@ -47,6 +48,7 @@ const sessionPage = () => {
 
 			fetchCurrentGuess();
 		}
+		console.log(token)
 	}, [token, router]);
 
 	const targetDate = "2024-10-26T12:00:00";
@@ -58,7 +60,7 @@ const sessionPage = () => {
 	};
 
 	const phrases = {
-		'true': `Bienvenue sur ta session ${userName}.`,
+		'true': `Ca y est l'enfant est né !!`,
 		'false': `Quels sont tes pronostics sur Bubule ${userName} ?`,
 		'endOfPredictions': (
 			<>
@@ -75,6 +77,9 @@ const sessionPage = () => {
 			<h1 className="text-2xl mt-4 font-semibold text-gray-700 text-center">
 				{phrases[isBorn] || `Bonjour ${userName}`}
 			</h1>
+			{(isBorn === 'true') && (
+				<BabyStatsComponent />
+			)}
 			{(!currentGuess && isBorn !== 'false') ? "" : (
 				<GuessFormComponent currentGuess={currentGuess} />
 			)}
