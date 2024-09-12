@@ -93,4 +93,4 @@ const sessionPage = () => {
 	);
 };
 
-export default sessionPage
+export default sessionPage;
