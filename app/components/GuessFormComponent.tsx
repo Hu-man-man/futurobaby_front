@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import backendUrl from "@/backendUrl";
 import { useIsBorn } from "../context/IsBornContext";
+import { CongratComponent } from "./CongratComposant";
 
 interface Guess {
 	guessed_gender: string;
@@ -164,6 +165,7 @@ const GuessFormComponent = ({
 					</button>
 				</div>
 			)}
+			{ (isBorn === 'true') && (< CongratComponent />)}
 			<form onSubmit={handleSubmit} className="space-y-12 py-5">
 				<div>
 					<div className="flex items-center justify-center space-x-4 pt-5">

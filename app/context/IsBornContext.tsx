@@ -10,7 +10,7 @@ type IsBornContextType = {
 const IsBornContext = createContext<IsBornContextType | undefined>(undefined);
 
 export const IsBornProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isBorn, setIsBorn] = useState<'true' | 'false' | 'endOfPredictions'>('false'); // Par défaut à 'false'
+  const [isBorn, setIsBorn] = useState<'true' | 'false' | 'endOfPredictions'>('false');
 
   return (
     <IsBornContext.Provider value={{ isBorn, setIsBorn }}>

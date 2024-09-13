@@ -61,7 +61,7 @@ const sessionPage = () => {
 
 	const phrases = {
 		'true': `Ca y est l'enfant est né !!`,
-		'false': `Quels sont tes pronostics sur Bubule ${userName} ?`,
+		'false': `Quels sont tes pronostics sur Bubulle ${userName} ?`,
 		'endOfPredictions': (
 			<>
 				Les pronostics sont terminés.<br />
