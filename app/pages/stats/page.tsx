@@ -94,46 +94,15 @@ const StatsPage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">
       <div>
-        Règles d'Attribution des Points Genre :<br />
-        2 points si le genre est correct.
-        <br />
-        <br />
-        Poids :<br />
-        3 points si le poids est exactement correct.
-        <br />
-        1 point si la différence est inférieure ou égale à 0,1 kg.
-        <br />
-        <br />
-        Taille :<br />
-        2 points si la taille est exactement correcte.
-        <br />
-        1 point si la différence est inférieure ou égale à 1 cm.
-        <br />
-        <br />
-        Prénoms :<br />
-        5 points si le prénom est exactement correct.
-        <br />
-        2 points si le prénom partage au moins 4 lettres en commun.
-        <br />
-        1 point si le prénom partage au moins 3 lettres en commun.
-        <br />
-        <br />
-        Date de naissance :<br />
-        2 points si la date est exactement correcte.
-        <br />
-        1 point si la différence est de 1 jour.
-        <br />
-        <br />
-        Heure de naissance :<br />
-        5 points si l'heure et les minutes sont exacts.
-        <br />
-        3 points si seule l'heure est exacte.
-        <br />1 point si la différence est d'une heure.
+        Merci à tous pour votre participation ! <br />
+        Un grand bravo aux gagnant de ce petit jeu Elsa qui a cumulé le plus de points et trouvé le prénom ! <br />
+        Félicitation aussi aux deuxième Truc et Bidule qui n'étaient pas très loin de gagner.<br />
+        Bien joué Tructruc pour aussi avoir trouvé le prénom mais par contre tu t'es bien planté sur le reste.<br />
+        Mension honorable à Tructruc pour avoir réussi à ne pas avoir cumulé le moindre point !<br />
       </div>
-
-      <div className="mt-6 w-full max-w-2xl">
-        <h2 className="text-xl font-bold text-center mb-4">Classements</h2>
-        <table className="min-w-full bg-white border border-gray-200">
+      <div className="flex flex-col justify-center my-8">
+        <h2 className="text-4xl text-center mb-4 font-arista">Classement</h2>
+        <table className="max-w-lg bg-white  rounded-lg overflow-hidden border-2 border-black">
           <thead>
             <tr>
               <th className="py-2 px-4 border-b">Rang</th>

@@ -20,8 +20,8 @@ const GuessFormComponent = ({
 	currentGuess: Guess | null;
 }) => {
 	const [gender, setGender] = useState<string>("");
-	const [weight, setWeight] = useState<string>("0.0");
-	const [size, setSize] = useState<string>("0");
+	const [weight, setWeight] = useState<string>("");
+	const [size, setSize] = useState<string>("");
 	const [names, setNames] = useState<{ girlName: string; boyName: string }[]>(
 		Array(5).fill({ girlName: "", boyName: "" })
 	);
@@ -165,7 +165,7 @@ const GuessFormComponent = ({
 					</button>
 				</div>
 			)}
-			{ (isBorn === 'true') && (< CongratComponent />)}
+			{isBorn === "true" && <CongratComponent />}
 			<form onSubmit={handleSubmit} className="space-y-12 py-5">
 				<div>
 					<div className="flex items-center justify-center space-x-4 pt-5">
@@ -222,6 +222,7 @@ const GuessFormComponent = ({
 								}
 							}}
 							disabled={!isEditing}
+							placeholder="0.0"
 							className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
 						/>
 						<span className="mt-2 px-3 py-2">kg</span>
@@ -240,11 +241,14 @@ const GuessFormComponent = ({
 							value={size}
 							onChange={(e) => {
 								const value = e.target.value;
-								if (/^\d*$/.test(value) && parseInt(value) <= 100) {
-									setSize(value);
+								if (/^\d*$/.test(value)) {
+									if (value === "" || parseInt(value) <= 100) {
+										setSize(value);
+									}
 								}
 							}}
 							disabled={!isEditing}
+							placeholder="0"
 							className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
 						/>
 						<span className="mt-2 px-3 py-2">cm</span>
@@ -345,10 +349,13 @@ const GuessFormComponent = ({
 						</div>
 					</div>
 					<div className="float-end">
-							{scores && (
-								<><span>Ton total : </span><ScoreDisplay score={scores.total_score} maxScore={2} /></>
-							)}
-						</div>
+						{scores && (
+							<>
+								<span>Ton total : </span>
+								<ScoreDisplay score={scores.total_score} maxScore={2} />
+							</>
+						)}
+					</div>
 				</div>
 				{loading ? (
 					<div className="text-center">Veillez patienter...</div>

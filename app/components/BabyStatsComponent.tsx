@@ -63,27 +63,6 @@ const BabyStatsComponent = () => {
                     <p className="text-xl leading-tight">La maman et le bébé se portent très bien ⭐.</p>
                     <p className="text-xl leading-tight">Cela dit pour ceux qui ont pronostiqués ces dernières infos sont très importantes pour vous alors les voilà :</p>
                     <p className="text-xl leading-tight">{babyIsBorn.name} pèse {babyIsBorn.weight} kg pour {babyIsBorn.size} cm. Et est née le {formattedDate} à {formattedTime}.</p>
-                    {/* <p className="text-xl leading-tight">
-						Nom : <span className="font-bold">{babyIsBorn.name}</span>
-					</p>
-					<p className="text-lg mt-2">
-						Genre :{" "}
-						<span className="font-bold">
-							{babyIsBorn.gender === "girl" ? "Fille" : "Garçon"}
-						</span>
-					</p>
-					<p className="text-lg mt-2">
-						Poids : <span className="font-bold">{babyIsBorn.weight} kg</span>
-					</p>
-					<p className="text-lg mt-2">
-						Taille : <span className="font-bold">{babyIsBorn.size} cm</span>
-					</p>
-					<p className="text-lg mt-2">
-						Date de naissance :{" "}
-						<span className="font-bold">
-							{new Date(babyIsBorn.birthdate).toLocaleDateString()}
-						</span>
-					</p> */}
 				</div>
 			</div>
 		</div>
