@@ -166,7 +166,16 @@ const GuessFormComponent = ({
 				</div>
 			)}
 			{isBorn === "true" && <CongratComponent />}
-			<form onSubmit={handleSubmit} className="space-y-12 py-5">
+			{/* <form onSubmit={handleSubmit} className="space-y-12 py-5"> */}
+			<form
+				onKeyDown={(e) => {
+					if (e.key === "Enter") {
+						e.preventDefault(); // Empêche la soumission du formulaire avec "Enter"
+					}
+				}}
+				onSubmit={handleSubmit}
+				className="space-y-12 py-5"
+			>
 				<div>
 					<div className="flex items-center justify-center space-x-4 pt-5">
 						<div
