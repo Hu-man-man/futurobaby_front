@@ -151,9 +151,9 @@ const GuessFormComponent = ({
 
 	return (
 		<div
-			className={`w-full max-w-lg mx-auto mt-8 ${
+			className={`w-full max-w-lg sm:mx-auto mt-8 ${
 				isEditing ? "bg-white" : "bg-neutral-400"
-			} duration-200 ease-in-out p-6 rounded-lg shadow-lg`}
+			} duration-200 ease-in-out p-6 rounded-3xl shadow-lg`}
 		>
 			{hasGuess && !isEditing && isBorn === "false" && (
 				<div className="text-center mb-4">
@@ -176,99 +176,116 @@ const GuessFormComponent = ({
 				onSubmit={handleSubmit}
 				className="space-y-12 py-5"
 			>
-				<div>
-					<div className="flex items-center justify-center space-x-4 pt-5">
-						<div
-							className={`relative ${
-								gender === "boy"
-									? "scale-100 bg-yellow-400 rounded-xl"
-									: "scale-50"
-							} transform transition-transform duration-200 ease-in-out`}
-							onClick={() => handleGenderClick("boy")}
-						>
-							<img
-								src="/mec.png"
-								alt="Garçon"
-								className={`w-24 h-24 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out ${
-									!isEditing && "pointer-events-none opacity-50"
-								}`}
-							/>
+				<div className="relative flex items-center justify-center">
+				<div
+						className={`flex items-center sm:justify-center ${
+							scores ? "justify-between" : "justify-center"
+						} w-full text-gray-700`}
+					>
+						<div className="flex items-center justify-center space-x-4 pt-5">
+							<div
+								className={`relative ${
+									gender === "boy"
+										? "scale-100 bg-yellow-400 rounded-xl"
+										: "scale-50"
+								} transform transition-transform duration-200 ease-in-out`}
+								onClick={() => handleGenderClick("boy")}
+							>
+								<img
+									src="/mec.png"
+									alt="Garçon"
+									className={`w-24 h-24 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out ${
+										!isEditing && "pointer-events-none opacity-50"
+									}`}
+								/>
+							</div>
+							<span className="text-gray-700">ou</span>
+							<div
+								className={`relative ${
+									gender === "girl"
+										? "scale-100  bg-yellow-400 rounded-xl"
+										: "scale-50"
+								} transform transition-transform duration-200 ease-in-out`}
+								onClick={() => handleGenderClick("girl")}
+							>
+								<img
+									src="/meuf.png"
+									alt="Fille"
+									className={`w-24 h-24 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out ${
+										!isEditing && "pointer-events-none opacity-50"
+									}`}
+								/>
+							</div>
 						</div>
-						<span className="text-gray-700">ou</span>
-						<div
-							className={`relative ${
-								gender === "girl"
-									? "scale-100  bg-yellow-400 rounded-xl"
-									: "scale-50"
-							} transform transition-transform duration-200 ease-in-out`}
-							onClick={() => handleGenderClick("girl")}
-						>
-							<img
-								src="/meuf.png"
-								alt="Fille"
-								className={`w-24 h-24 cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out ${
-									!isEditing && "pointer-events-none opacity-50"
-								}`}
-							/>
-						</div>
-						<div className="float-end">
+						<div className="sm:absolute sm:right-6">
 							{scores && (
 								<ScoreDisplay score={scores.score_gender} maxScore={2} />
 							)}
 						</div>
 					</div>
 				</div>
-				<div>
-					<div className="flex items-center justify-center text-gray-700">
-						<img src="/weight.png" alt="Poid" className="w-12 h-12 mr-6" />
-						<input
-							type="text"
-							value={weight}
-							onChange={(e) => {
-								const value = e.target.value;
-								if (/^\d*\.?\d*$/.test(value)) {
-									setWeight(value);
-								}
-							}}
-							disabled={!isEditing}
-							placeholder="0.0"
-							className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
-						/>
-						<span className="mt-2 px-3 py-2">kg</span>
-						<div className="text-center mb-4">
+				<div className="relative flex items-center justify-center">
+					<div
+						className={`flex items-center sm:justify-center ${
+							scores ? "justify-between" : "justify-center"
+						} w-full text-gray-700`}
+					>
+						<div className="flex items-center justify-center">
+							<img src="/weight.png" alt="Poid" className="w-12 h-12 mr-6" />
+							<input
+								type="text"
+								value={weight}
+								onChange={(e) => {
+									const value = e.target.value;
+									if (/^\d*\.?\d*$/.test(value)) {
+										setWeight(value);
+									}
+								}}
+								disabled={!isEditing}
+								placeholder="0.0"
+								className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
+							/>
+							<span className="mt-2 px-3 py-2">kg</span>
+						</div>
+						<div className="sm:absolute sm:right-6">
 							{scores && (
 								<ScoreDisplay score={scores.score_weight} maxScore={2} />
 							)}
 						</div>
 					</div>
 				</div>
-				<div>
-					<div className="flex items-center justify-center text-gray-700">
-						<img src="/height.png" alt="Taille" className="w-12 h-12 mr-6" />
-						<input
-							type="text"
-							value={size}
-							onChange={(e) => {
-								const value = e.target.value;
-								if (/^\d*$/.test(value)) {
-									if (value === "" || parseInt(value) <= 100) {
-										setSize(value);
+				<div className="relative flex items-center justify-center">
+				<div
+						className={`flex items-center sm:justify-center ${
+							scores ? "justify-between" : "justify-center"
+						} w-full text-gray-700`}
+					>
+						<div className="flex items-center justify-center">
+							<img src="/height.png" alt="Taille" className="w-12 h-12 mr-6" />
+							<input
+								type="text"
+								value={size}
+								onChange={(e) => {
+									const value = e.target.value;
+									if (/^\d*$/.test(value)) {
+										if (value === "" || parseInt(value) <= 100) {
+											setSize(value);
+										}
 									}
-								}
-							}}
-							disabled={!isEditing}
-							placeholder="0"
-							className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
-						/>
-						<span className="mt-2 px-3 py-2">cm</span>
-						<div className="float-end">
-							{scores && (
-								<ScoreDisplay score={scores.score_size} maxScore={2} />
-							)}
+								}}
+								disabled={!isEditing}
+								placeholder="0"
+								className="mt-2 w-20 px-3 py-2 rounded-md bg-yellow-200"
+							/>
+							<span className="mt-2 px-3 py-2">cm</span>
 						</div>
 					</div>
+					<div className="sm:absolute sm:right-6">
+						{scores && <ScoreDisplay score={scores.score_size} maxScore={2} />}
+					</div>
 				</div>
-				<div>
+				<div className="relative flex items-center justify-center">
+					<div></div>
 					<div className="block text-gray-700">
 						<div className="overflow-hidden rounded-lg border border-black mt-2">
 							<table className="w-full">
@@ -317,57 +334,91 @@ const GuessFormComponent = ({
 								</tbody>
 							</table>
 						</div>
-						<div className="float-end">
+						<div className="absolute right-0 sm:right-6 bottom-1">
 							{scores && (
 								<ScoreDisplay score={scores.score_names} maxScore={2} />
 							)}
 						</div>
 					</div>
 				</div>
-				<div>
-					<div className="flex items-center justify-center text-gray-700">
-						<img src="/calendar.png" alt="Date" className="w-12 h-12 mr-6" />
-						<input
-							type="date"
-							value={date}
-							onChange={(e) => setDate(e.target.value)}
-							disabled={!isEditing}
-							className="mt-2 px-3 py-2 w-40 bg-yellow-200 rounded-md"
-						/>
-						<div className="float-end">
+				<div className="relative flex items-center justify-center">
+				<div
+						className={`flex items-center sm:justify-center ${
+							scores ? "justify-between" : "justify-center"
+						} w-full text-gray-700`}
+					>
+						<div className="flex items-center justify-center">
+							<img src="/calendar.png" alt="Date" className="w-12 h-12 mr-6" />
+							<input
+								type="date"
+								value={date}
+								onChange={(e) => setDate(e.target.value)}
+								disabled={!isEditing}
+								className="mt-2 px-3 py-2 w-40 bg-yellow-200 rounded-md"
+							/>
+						</div>
+						<div className="sm:absolute sm:right-6">
 							{scores && (
 								<ScoreDisplay score={scores.score_date} maxScore={2} />
 							)}
 						</div>
 					</div>
 				</div>
-				<div>
-					<div className="flex items-center justify-center text-gray-700">
-						<img src="/clock.png" alt="heure" className="w-12 h-12 mr-6" />
-						<input
-							type="time"
-							value={time}
-							onChange={(e) => setTime(e.target.value)}
-							disabled={!isEditing}
-							className="mt-2 w-40 px-3 py-2 bg-yellow-200 rounded-md"
-						/>
-						<div className="float-end">
+				<div className="relative flex items-center justify-center">
+				<div
+						className={`flex items-center sm:justify-center ${
+							scores ? "justify-between" : "justify-center"
+						} w-full text-gray-700`}
+					>
+						<div className="flex items-center justify-center">
+							<img src="/clock.png" alt="heure" className="w-12 h-12 mr-6" />
+							<input
+								type="time"
+								value={time}
+								onChange={(e) => setTime(e.target.value)}
+								disabled={!isEditing}
+								className="mt-2 w-40 px-3 py-2 bg-yellow-200 rounded-md"
+							/>
+						</div>
+						<div className="sm:absolute sm:right-6">
 							{scores && (
 								<ScoreDisplay score={scores.score_time} maxScore={2} />
 							)}
 						</div>
 					</div>
-					<div className="float-end">
-						{scores && (
-							<>
-								<span>Ton total : </span>
-								<ScoreDisplay score={scores.total_score} maxScore={2} />
-							</>
-						)}
-					</div>
 				</div>
+				{isBorn === "true" && (
+					<>
+						<div className="w-full border-b-2 border-black h-1 border-dotted"></div>
+						<div
+							className="relative flex items-center justify-center"
+							style={{ marginBottom: "0", marginTop: "1rem" }}
+						>
+							{/* <div className="flex items-center sm:justify-center justify-between w-full text-gray-700 sm:my-10"> */}
+							<div
+						className={`flex items-center sm:justify-center ${
+							scores ? "justify-between" : "justify-center"
+						} w-full text-gray-700 sm:my-10`}
+					>
+								<div></div>
+								<div className="sm:absolute sm:right-6 flex items-center justify-center">
+									<div className="absolute right-20 font-arista text-2xl whitespace-nowrap">
+										Ton total :
+									</div>
+									<div className="">
+										{scores && (
+											<>
+												<ScoreDisplay score={scores.total_score} maxScore={2} />
+											</>
+										)}
+									</div>
+								</div>
+							</div>
+						</div>
+					</>
+				)}
 				{loading ? (
-					<div className="text-center">Veillez patienter...</div>
+					<div className="text-center">Veuillez patienter...</div>
 				) : (
 					(!hasGuess || isEditing) && (
 						<div className="text-center">

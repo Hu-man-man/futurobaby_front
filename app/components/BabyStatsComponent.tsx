@@ -48,7 +48,7 @@ const BabyStatsComponent = () => {
 
 
 	return (
-		<div className="w-full max-w-lg mx-auto mt-8 bg-white shadow-lg rounded-lg overflow-hidden">
+		<div className="w-full max-w-lg mx-auto mt-8 bg-white shadow-lg rounded-3xl overflow-hidden">
 			<div className="sm:flex sm:items-center px-6 py-4">
 				<div className="text-center sm:text-left">
                     <div className="flex justify-center">
@@ -59,7 +59,7 @@ const BabyStatsComponent = () => {
 						/>
                     </div>
 					
-                    <p className="text-xl leading-tight">Après beaucoup d'efforts, veillez acceuillir une nouvelle âme, celle de la petite {babyIsBorn.name}.</p>
+                    <p className="text-xl leading-tight">Après beaucoup d'efforts, veuillez acceuillir une nouvelle âme, celle de la petite {babyIsBorn.name}.</p>
                     <p className="text-xl leading-tight">La maman et le bébé se portent très bien ⭐.</p>
                     <p className="text-xl leading-tight">Cela dit pour ceux qui ont pronostiqués ces dernières infos sont très importantes pour vous alors les voilà :</p>
                     <p className="text-xl leading-tight">{babyIsBorn.name} pèse {babyIsBorn.weight} kg pour {babyIsBorn.size} cm. Et est née le {formattedDate} à {formattedTime}.</p>

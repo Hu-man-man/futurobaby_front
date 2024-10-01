@@ -3,7 +3,7 @@ import React from "react";
 
 export const RulesComponent = () => {
 	return (
-		<div className={"w-full max-w-lg mx-auto mt-8 bg-white p-6 rounded-lg shadow-lg"}>
+		<div className={"w-full max-w-lg mx-auto mt-8 bg-white p-6 rounded-3xl"}>
 			<h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
 				Règles d'Attribution des Points
 			</h2>
