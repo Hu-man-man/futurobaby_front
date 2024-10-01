@@ -44,31 +44,70 @@ const sessionPage = () => {
 		}
 	};
 
+	// useEffect(() => {
+	// 	if (!token) {
+	// 		router.push("/"); // Redirige vers la page d'accueil si non connecté
+	// 	} else {
+	// 		const userDataString = localStorage.getItem("userData");
+	// 		const savedGuess = localStorage.getItem("currentGuess");
+
+	// 		// Si userData existe mais pas currentGuess, déconnecte l'utilisateur
+	// 		if (userDataString && !savedGuess) {
+	// 			logout();
+	// 			localStorage.removeItem("userData"); // Supprime userData
+	// 			router.push("/"); // Redirige vers la page de connexion
+	// 		} else if (userDataString) {
+	// 			const userData = JSON.parse(userDataString);
+	// 			setUserName(userData.userName || "");
+	// 		}
+
+	// 		if (!savedGuess) {
+	// 			// Récupère les données du pronostic si elles ne sont pas dans le localStorage
+	// 			fetchCurrentGuess();
+	// 		} else {
+	// 			setCurrentGuess(JSON.parse(savedGuess));
+	// 			setIsLoadingGuess(false); // Arrête le chargement si un pronostic est trouvé
+	// 		}
+	// 	}
+	// }, [token, router]);
+
 	useEffect(() => {
-		if (!token) {
-			router.push("/"); // Redirige vers la page d'accueil si non connecté
-		} else {
+		const verifyData = async () => {
+			if (!token) {
+				router.push("/"); // Redirige vers la page d'accueil si non connecté
+				return;
+			}
+
 			const userDataString = localStorage.getItem("userData");
 			const savedGuess = localStorage.getItem("currentGuess");
 
-			// Si userData existe mais pas currentGuess, déconnecte l'utilisateur
+			// Si userData existe mais pas currentGuess, ne déconnecte pas automatiquement si c'est la première connexion
 			if (userDataString && !savedGuess) {
-				logout();
-				localStorage.removeItem("userData"); // Supprime userData
-				router.push("/"); // Redirige vers la page de connexion
+				try {
+					await fetchCurrentGuess(); // Récupérer les données avant de prendre une décision
+				} catch (error) {
+					console.error(
+						"Erreur lors de la récupération des données de guess :",
+						error
+					);
+					logout();
+					localStorage.removeItem("userData"); // Supprime userData en cas d'erreur de récupération
+					router.push("/"); // Redirige vers la page de connexion
+				}
 			} else if (userDataString) {
 				const userData = JSON.parse(userDataString);
 				setUserName(userData.userName || "");
 			}
 
 			if (!savedGuess) {
-				// Récupère les données du pronostic si elles ne sont pas dans le localStorage
-				fetchCurrentGuess();
+				await fetchCurrentGuess();
 			} else {
 				setCurrentGuess(JSON.parse(savedGuess));
 				setIsLoadingGuess(false); // Arrête le chargement si un pronostic est trouvé
 			}
-		}
+		};
+
+		verifyData(); // Appelle la fonction asynchrone pour gérer la logique
 	}, [token, router]);
 
 	const targetDate = "2024-10-26T12:00:00";
