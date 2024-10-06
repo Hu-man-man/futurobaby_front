@@ -59,3 +59,4 @@ const CountdownComponent = ({ targetDate }: CountdownProps) => {
 };
 
 export default CountdownComponent;
+

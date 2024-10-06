@@ -75,6 +75,8 @@ export default function HomePage() {
 						type="text"
 						placeholder="Nom"
 						title="name"
+						id="name" 
+						name="name" 
 						value={name}
 						onChange={(e) => setName(e.target.value)}
 						required
@@ -84,6 +86,8 @@ export default function HomePage() {
 						type="password"
 						placeholder="Mot de passe"
 						title="password"
+						id="password"
+						name="password"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 						required
@@ -94,6 +98,8 @@ export default function HomePage() {
 							type="email"
 							placeholder="Email"
 							title="email"
+							id="email"
+							name="email"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 							required
