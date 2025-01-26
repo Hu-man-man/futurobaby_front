@@ -52,14 +52,12 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { GuessDisplayComponent } from "../../components/GuessDisplayComponent";
-import { useEffect, useState, Suspense } from "react";
 
 const GuessDisplayPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  // Mettre à jour l'état pour accepter null | string
   const [params, setParams] = useState<{
     user_Id: string | null;
     user_name: string | null;
@@ -70,7 +68,6 @@ const GuessDisplayPage = () => {
     rank: null,
   });
 
-  // Ne s'exécute que côté client
   useEffect(() => {
     const user_Id = searchParams.get("user_id");
     const user_name = searchParams.get("user_name");
@@ -85,37 +82,34 @@ const GuessDisplayPage = () => {
     }
   }, [searchParams]);
 
-  // Si les paramètres ne sont pas encore définis, afficher un message de chargement
+  // Rendu conditionnel, n'affiche que si les paramètres sont prêts
   if (!params.user_Id || !params.user_name || params.rank === null) {
     return <div>Loading...</div>;
   }
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className="flex flex-col justify-center items-center gap-2 my-3">
-        <div
-          className="custom-button outline-offset-8 font-bold w-fit"
-          onClick={() => router.push("/pages/stats")}
-        >
-          Retour
-        </div>
-        <div className="md:m-0 m-2">
-          <GuessDisplayComponent
-            user_Id={params.user_Id}
-            user_name={params.user_name}
-            rank={params.rank}
-          />
-        </div>
-        <div
-          className="custom-button outline-offset-8 font-bold w-fit"
-          onClick={() => router.push("/pages/stats")}
-        >
-          Retour
-        </div>
+    <div className="flex flex-col justify-center items-center gap-2 my-3">
+      <div
+        className="custom-button outline-offset-8 font-bold w-fit"
+        onClick={() => router.push("/pages/stats")}
+      >
+        Retour
       </div>
-    </Suspense>
+      <div className="md:m-0 m-2">
+        <GuessDisplayComponent
+          user_Id={params.user_Id}
+          user_name={params.user_name}
+          rank={params.rank}
+        />
+      </div>
+      <div
+        className="custom-button outline-offset-8 font-bold w-fit"
+        onClick={() => router.push("/pages/stats")}
+      >
+        Retour
+      </div>
+    </div>
   );
 };
 
 export default GuessDisplayPage;
-
