@@ -96,11 +96,11 @@ const GuessDisplayPage = () => {
         Retour
       </div>
       <div className="md:m-0 m-2">
-        <GuessDisplayComponent
+        {/* <GuessDisplayComponent
           user_Id={params.user_Id}
           user_name={params.user_name}
           rank={params.rank}
-        />
+        /> */} {/* j'esquive le problème pour la publication */}
       </div>
       <div
         className="custom-button outline-offset-8 font-bold w-fit"
