@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useIsBorn } from "@/app/context/IsBornContext";
 
 interface TimeLeft {
 	jours: number;
@@ -14,6 +15,8 @@ type CountdownProps = {
 };
 
 const CountdownComponent = ({ targetDate }: CountdownProps) => {
+	const { isBorn } = useIsBorn();
+
 	const calculateTimeLeft = (): TimeLeft => {
 		const différence = +new Date(targetDate) - +new Date();
 		let timeLeft: TimeLeft = {
@@ -40,6 +43,12 @@ const CountdownComponent = ({ targetDate }: CountdownProps) => {
 			<h1 className="text-3xl sm:text-4xl mb-6 font-arista">
 				pronostics sur <br/><span className="text-8xl sm:text-9xl">Bubulle</span>
 			</h1>
+			{isBorn === "true" ? (
+				<div className="flex items-center justify-center">
+					<h2 className="mb-6 p-4 font-arista text-3xl sm:text-4xl text-white rounded-full w-fit bg-yellow-400">L'enfant est né !</h2>
+				</div>
+			):(
+				<>
             <h3 className="text-sm sm:text-base md:text-lg">naissance théorique</h3>
             <div className="flex flex-wrap justify-center space-x-4 sm:space-x-6 md:space-x-8 pt-1">
 				{Object.entries(timeLeft).map(([key, value]) => (
@@ -54,6 +63,7 @@ const CountdownComponent = ({ targetDate }: CountdownProps) => {
 					<span className="text-xs sm:text-sm md:text-base">ça va pas tarder</span>
 				)}
 			</div>
+			</>)}
 		</div>
 	);
 };

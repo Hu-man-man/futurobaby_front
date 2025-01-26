@@ -44,34 +44,10 @@ const sessionPage = () => {
 		}
 	};
 
-	// useEffect(() => {
-	// 	if (!token) {
-	// 		router.push("/"); // Redirige vers la page d'accueil si non connecté
-	// 	} else {
-	// 		const userDataString = localStorage.getItem("userData");
-	// 		const savedGuess = localStorage.getItem("currentGuess");
-
-	// 		// Si userData existe mais pas currentGuess, déconnecte l'utilisateur
-	// 		if (userDataString && !savedGuess) {
-	// 			logout();
-	// 			localStorage.removeItem("userData"); // Supprime userData
-	// 			router.push("/"); // Redirige vers la page de connexion
-	// 		} else if (userDataString) {
-	// 			const userData = JSON.parse(userDataString);
-	// 			setUserName(userData.userName || "");
-	// 		}
-
-	// 		if (!savedGuess) {
-	// 			// Récupère les données du pronostic si elles ne sont pas dans le localStorage
-	// 			fetchCurrentGuess();
-	// 		} else {
-	// 			setCurrentGuess(JSON.parse(savedGuess));
-	// 			setIsLoadingGuess(false); // Arrête le chargement si un pronostic est trouvé
-	// 		}
-	// 	}
-	// }, [token, router]);
-
 	useEffect(() => {
+		if (isBorn === "true") {
+			router.push("stats");
+		}
 		const verifyData = async () => {
 			if (!token) {
 				router.push("/"); // Redirige vers la page d'accueil si non connecté
@@ -108,7 +84,7 @@ const sessionPage = () => {
 		};
 
 		verifyData(); // Appelle la fonction asynchrone pour gérer la logique
-	}, [token, router]);
+	}, [isBorn, token, router]);
 
 	const targetDate = "2024-10-26T12:00:00";
 
@@ -120,7 +96,7 @@ const sessionPage = () => {
 	};
 
 	const phrases = {
-		true: `Ca y est l'enfant est né !!`,
+		true: `Bienvenue à...`,
 		false: `Quels sont tes pronostics sur Bubulle ${userName} ?`,
 		endOfPredictions: (
 			<>

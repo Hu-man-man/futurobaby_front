@@ -55,11 +55,11 @@ const GuessFormComponent = ({
 		if (isBorn === "true") {
 			const fetchScores = async () => {
 				try {
-					const response = await fetch(`${backendUrl}/babyIsBorn/scores`, {
+					const response = await fetch(`${backendUrl}/babyIsBorn/scores?user_id=26`, { // 26 c'est temporaire c'est pour tester aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 						method: "GET",
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
+						// headers: {
+						// 	Authorization: `Bearer ${token}`,
+						// },
 					});
 
 					if (!response.ok) {

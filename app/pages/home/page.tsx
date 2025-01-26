@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useIsBorn } from "@/app/context/IsBornContext";
 import { useRouter } from "next/navigation";
 import { useAuthHandlers } from "../../functions/authHandlers";
 import CountdownComponent from "../../components/CountdownComponent";
@@ -11,16 +12,20 @@ export default function HomePage() {
 	const [password, setPassword] = useState("");
 	const [email, setEmail] = useState("");
 	const [isLoginMode, setIsLoginMode] = useState(false);
+	const { isBorn } = useIsBorn();
 	const [loading, setLoading] = useState(false);
 	const { token } = useAuth();
 	const router = useRouter();
 	const { handleOnSignin, handleOnSignup } = useAuthHandlers();
 
 	useEffect(() => {
+		if (isBorn === "true") {
+            router.push("pages/stats");
+        }
 		if (token) {
 			router.push("pages/session");
 		}
-	}, [token, router]);
+	}, [isBorn, token, router]);
 
 	const targetDate = "2024-10-26T12:00:00";
 

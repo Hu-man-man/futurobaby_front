@@ -1,141 +1,141 @@
-
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../context/AuthContext";
+import { useIsBorn } from "@/app/context/IsBornContext";
 import backendUrl from "@/backendUrl";
+import CountdownComponent from "../../components/CountdownComponent";
+import BabyStatsComponent from "@/app/components/BabyStatsComponent";
 
 // Définir un type pour les classements
 type Ranking = {
-  user_name: string;
-  total_score: number;
-  rank: string;
+	user_name: string;
+	total_score: number;
+	rank: number;
+	user_id: string;
 };
 
+const LOCAL_STORAGE_KEY = "rankings";
+
 const StatsPage = () => {
-  const router = useRouter();
-  const { token, logout } = useAuth();
-  const [userName, setUserName] = useState("");
-  const [currentGuess, setCurrentGuess] = useState(null); // Pour stocker la réponse de l'API
-  const [rankings, setRankings] = useState<Ranking[]>([]); // Ajouter le type ici
+	const router = useRouter();
+	const [rankings, setRankings] = useState<Ranking[]>([]);
+	const { isBorn } = useIsBorn();
 
-  useEffect(() => {
-    if (!token) {
-      router.push("/"); // Redirige vers la page d'accueil si non connecté
-    } else {
-      const userDataString = localStorage.getItem("userData");
-      if (userDataString) {
-        const userData = JSON.parse(userDataString);
-        setUserName(userData.userName || "");
-      }
+	useEffect(() => {
+		// Fonction pour récupérer les données depuis l'API
+		const fetchRankings = async () => {
+			try {
+				const response = await fetch(`${backendUrl}/babyIsBorn/rankings`, {
+					method: "GET",
+				});
+				if (response.ok) {
+					const data = await response.json();
+					// Sauvegarder les données dans le localStorage
+					localStorage.setItem(
+						LOCAL_STORAGE_KEY,
+						JSON.stringify(data.rankings)
+					);
+					setRankings(data.rankings);
+				}
+			} catch (error) {
+				console.error(
+					"Erreur lors de la récupération des classements depuis l'API :",
+					error
+				);
+			}
+		};
 
-      // Fetch current guess data
-      const fetchCurrentGuess = async () => {
-        try {
-          const response = await fetch(`${backendUrl}/guesses/current`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+		// Vérifier les données existantes dans le localStorage
+		const savedRankings = localStorage.getItem(LOCAL_STORAGE_KEY);
+		if (savedRankings) {
+			setRankings(JSON.parse(savedRankings));
+		} else {
+			fetchRankings();
+		}
+	}, []);
 
-          if (response.ok) {
-            const data = await response.json();
-            setCurrentGuess(data.guess);
-          }
-        } catch (error) {
-          console.error(
-            "Erreur lors de la récupération des données de guess :",
-            error
-          );
-        }
-      };
+	const targetDate = "2024-10-26T12:00:00";
 
-      // Fetch rankings data
-      const fetchRankings = async () => {
-        try {
-          const response = await fetch(`${backendUrl}/babyIsBorn/rankings`, {
-            method: "GET",
-          });
+	return (
+		<main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 m-4">
+			<CountdownComponent targetDate={targetDate} />
+			<h1 className="text-2xl mt-4 font-semibold text-gray-700 text-center">
+				Bienvenue à...
+			</h1>
 
-          if (response.ok) {
-            const data = await response.json();
-            setRankings(data.rankings); // Type 'Ranking[]' est maintenant appliqué ici
-			console.log(rankings);
-          }
-        } catch (error) {
-          console.error(
-            "Erreur lors de la récupération des classements :",
-            error
-          );
-        }
-      };
-
-      fetchCurrentGuess();
-      fetchRankings();
-    }
-  }, [token, router]);
-
-  const handleLogout = () => {
-    logout();
-    localStorage.removeItem("userData");
-    router.push("/"); // Redirige vers la page de connexion
-  };
-
-  const handleSessionPage = () => {
-    if (token) {
-      router.push("/pages/session");
-    } else {
-      handleLogout();
-    }
-  };
-
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">
-      <div>
-        Merci à tous pour votre participation ! <br />
-        Un grand bravo aux gagnant de ce petit jeu Elsa qui a cumulé le plus de points et trouvé le prénom ! <br />
-        Félicitation aussi aux deuxième Truc et Bidule qui n'étaient pas très loin de gagner.<br />
-        Bien joué Tructruc pour aussi avoir trouvé le prénom mais par contre tu t'es bien planté sur le reste.<br />
-        Mension honorable à Tructruc pour avoir réussi à ne pas avoir cumulé le moindre point !<br />
-      </div>
-      <div className="flex flex-col justify-center my-8">
-        <h2 className="text-4xl text-center mb-4 font-arista">Classement</h2>
-        <table className="max-w-lg bg-white  rounded-lg overflow-hidden border-2 border-black">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border-b">Rang</th>
-              <th className="py-2 px-4 border-b">Nom</th>
-              <th className="py-2 px-4 border-b">Score Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rankings.map((ranking, index) => (
-              <tr key={index}>
-                <td className="py-2 px-4 border-b text-center">{ranking.rank}</td>
-                <td className="py-2 px-4 border-b text-center">{ranking.user_name}</td>
-                <td className="py-2 px-4 border-b text-center">{ranking.total_score}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div
-        className="text-slate-500 hover:text-black hover:cursor-pointer mt-2"
-        onClick={handleSessionPage}
-      >
-        Retour
-      </div>
-      <div
-        className="text-slate-500 hover:text-black hover:cursor-pointer mt-2"
-        onClick={handleLogout}
-      >
-        Se déconnecter
-      </div>
-    </main>
-  );
+			{/* Afficher les statistiques du bébé uniquement si isBorn est "true" */}
+			{isBorn === "true" && <BabyStatsComponent />}
+			<h2 className="text-4xl font-arista text-center mb-7 text-gray-800 mt-7">
+				Podium
+			</h2>
+			<div className="flex justify-center">
+				<img
+					src="/podium.jpg"
+					alt="podium"
+					className={`max-w-96 w-full rounded-lg shadow-lg`}
+				/>
+			</div>
+			<h2 className="text-4xl font-arista text-center mb-7 text-gray-800 mt-7">
+				Fréquence prénoms
+			</h2>
+			<div className="flex justify-center">
+				<img
+					src="/prenomsproposes.jpg"
+					alt="stats des prénoms les plus proposés"
+					className={`max-w-96 w-full  rounded-lg shadow-lg`}
+				/>
+			</div>
+			<h2 className="text-4xl font-arista text-center mb-7 text-gray-800 mt-7">
+				Stats
+			</h2>
+			<div className="flex justify-center">
+				<img
+					src="/stats.jpg"
+					alt="statistiques"
+					className={`max-w-96 w-full rounded-lg shadow-lg`}
+				/>
+			</div>
+			<div className="flex flex-col justify-center my-8 mx-24 md:m-4">
+				<h2 className="text-4xl text-center mb-4 font-arista">Classement</h2>
+				<table className="max-w-lg bg-white  rounded-lg overflow-hidden border-2 border-black shadow-lg">
+					<thead>
+						<tr>
+							<th className="py-2 px-4 border-b">Rang</th>
+							<th className="py-2 px-4 border-b">Nom</th>
+							<th className="py-2 px-4 border-b">Score Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						{rankings.map((ranking, index) => (
+							<tr
+								key={index}
+								onClick={() => {
+									const url = `/pages/guessDisplay?user_id=${
+										ranking.user_id
+									}&user_name=${encodeURIComponent(ranking.user_name)}&rank=${
+										ranking.rank
+									}`;
+									router.push(url); // Construisez l'URL comme une chaîne de caractères
+								}}
+								className="cursor-pointer hover:bg-gray-100"
+							>
+								<td className="py-2 px-4 border-b text-center">
+									{ranking.rank}
+								</td>
+								<td className="py-2 px-4 border-b text-center">
+									{ranking.user_name}
+								</td>
+								<td className="py-2 px-4 border-b text-center">
+									{ranking.total_score}
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</main>
+	);
 };
 
 export default StatsPage;
