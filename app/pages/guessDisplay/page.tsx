@@ -3,6 +3,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { GuessDisplayComponent } from "../../components/GuessDisplayComponent";
+import { Suspense } from 'react';
 
 const GuessDisplayPage = () => {
   const router = useRouter();
@@ -27,6 +28,7 @@ const GuessDisplayPage = () => {
   }
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <div className="flex flex-col justify-center items-center gap-2 my-3">
       <div
         className="custom-button outline-offset-8 font-bold w-fit"
@@ -44,6 +46,7 @@ const GuessDisplayPage = () => {
         Retour
       </div>
     </div>
+    </Suspense>
   );
 };
 
