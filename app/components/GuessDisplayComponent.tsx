@@ -93,27 +93,7 @@ export const GuessDisplayComponent = ({
 			alert(rules[type]);
 		}
 	};
-
-	// const ScoreDisplay = ({
-	// 	score,
-	// 	maxScore,
-	// 	type,
-	// }: {
-	// 	score: number;
-	// 	maxScore?: number;
-	// 	type: string;
-	// }) => {
-	// 	return (
-	// 		<div
-	// 			onClick={() => handleScoreClick(type)}
-	// 			className="font-bold border-white border-2 text-white rounded-full aspect-square w-12 flex items-center justify-center cursor-pointer hover:bg-gray-300"
-	// 			title="Clique pour voir la règle"
-	// 		>
-	// 			{score ?? "N/A"}
-	// 			{maxScore && `/${maxScore}`}
-	// 		</div>
-	// 	);
-	// };
+	
 	const ScoreDisplay = ({
 		score,
 		maxScore,
