@@ -165,7 +165,7 @@ const GuessFormComponent = ({
 					</button>
 				</div>
 			)}
-			{isBorn === "true" && <CongratComponent />}
+			{/* {isBorn === "true" && <CongratComponent />} */}
 			{/* <form onSubmit={handleSubmit} className="space-y-12 py-5"> */}
 			<form
 				onKeyDown={(e) => {
