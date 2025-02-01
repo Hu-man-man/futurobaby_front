@@ -129,9 +129,9 @@ export const GuessDisplayComponent = ({
 
 	return (
 		<div className="w-full max-w-lg sm:mx-auto mt-8 bg-neutral-400 duration-200 ease-in-out p-6 rounded-3xl shadow-lg">
-			{modalContent && (
+			{/* {modalContent && (
 				<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-					<div className="bg-white p-6 rounded-lg shadow-lg">
+					<div className="bg-white p-6 rounded-lg shadow-lg m-3">
 						<p className="text-gray-800">{modalContent}</p>
 						<button
 							className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
@@ -141,7 +141,22 @@ export const GuessDisplayComponent = ({
 						</button>
 					</div>
 				</div>
-			)}
+			)} */}
+			{modalContent && (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-80">
+            {modalContent.split("\n").map((line, index) => (
+                <p key={index} className="text-gray-800">{line}</p>
+            ))}
+            <button 
+                onClick={() => setModalContent(null)} 
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+            >
+                Fermer
+            </button>
+        </div>
+    </div>
+)}
 			<CongratComponent user_name={user_name} rank={rank} />
 			<form
 				onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
