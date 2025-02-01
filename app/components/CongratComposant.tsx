@@ -11,8 +11,8 @@ export const CongratComponent = ({ user_name, rank }: CongratComponentProps) => 
 
   // Fonction pour formater le rang de l'utilisateur
   const formatRank = (rank: number) => {
-    if (rank === 1) return "1er";
-    if (rank === 2) return "2nd";
+    if (rank === 1) return "1er.e";
+    if (rank === 2) return "2nd.e";
     if (rank) return `${rank}ème`;
     return "sans classement";
   };
