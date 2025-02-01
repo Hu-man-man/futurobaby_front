@@ -82,12 +82,12 @@ export const GuessDisplayComponent = ({
 				gender:
 					"Genre :\n• 3 points si tu as deviné que ça allait être un Garçon.",
 				weight:
-					"Poids :\n• 4 points pour le poids exact de 3,5 kg.\n• 1 point si le poids est compris entre 3,4 kg et 3,6 kg.",
-				size: "Taille :\n• 3 points pour la taille exacte de 52,5 cm.\n• 1 point si la taille est comprise entre 50 cm et 55 cm.",
+					"Poids :\n• 4 points pour le poids exact de 3,5 kg.\n• 1 point si le poids est compris entre 3,4 et 3,6 kg.",
+				size: "Taille :\n• La taille exacte est de 52,5 cm tu auras 3 points pour 52 et 53 cm.\n• 1 point si la taille est comprise entre 50 cm et 55 cm.",
 				names:
 					"Prénoms :\n• 7 points si tu as trouvé le prénom Marin.\n• 2 points si un des prénoms proposés partage au moins 4 lettres avec 'Marin'.\n• 1 point si un des prénoms proposés partage au moins 3 lettres avec 'Marin'.",
 				date: "Date de naissance :\n• 3 points si tu as trouvé la date exacte du 26 octobre 2024.\n• 1 point pour les 25 et 27 octobre 2024.",
-				time: "Heure de naissance :\n• 5 points si tu as trouvé l'heure exacte (à 15 minutes près) de 18h58.\n• 3 points si la différence est d'une heure : entre 17h58 et 19h58.\n• 1 point si la différence est comprise entre 60 et 120 minutes.",
+				time: "Heure de naissance :\n• 5 points si tu as trouvé l'heure ( à 15 minutes près ) de 18h58.\n• 3 points si la différence est d'une heure : entre 17h58 et 19h58.\n• 1 point si la différence est comprise entre 60 et 120 minutes.",
 			};
 
 			alert(rules[type]);
