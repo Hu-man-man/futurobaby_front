@@ -32,6 +32,7 @@ export const GuessDisplayComponent = ({
 	const [date, setDate] = useState<string>("2024-10-26");
 	const [time, setTime] = useState<string>("12:00");
 	const [scores, setScores] = useState<any>(null);
+	const [modalContent, setModalContent] = useState<string | null>(null);
 	const { isBorn } = useIsBorn();
 
 	useEffect(() => {
@@ -90,10 +91,11 @@ export const GuessDisplayComponent = ({
 				time: "Heure de naissance :\n• 5 points si tu as trouvé l'heure ( à 15 minutes près ) de 18h58.\n• 3 points si la différence est d'une heure : entre 17h58 et 19h58.\n• 1 point si la différence est comprise entre 60 et 120 minutes.",
 			};
 
-			alert(rules[type]);
+			// alert(rules[type]);
+			setModalContent(rules[type]); // Ouvre la modale avec le texte
 		}
 	};
-	
+
 	const ScoreDisplay = ({
 		score,
 		maxScore,
@@ -127,6 +129,19 @@ export const GuessDisplayComponent = ({
 
 	return (
 		<div className="w-full max-w-lg sm:mx-auto mt-8 bg-neutral-400 duration-200 ease-in-out p-6 rounded-3xl shadow-lg">
+			{modalContent && (
+				<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+					<div className="bg-white p-6 rounded-lg shadow-lg">
+						<p className="text-gray-800">{modalContent}</p>
+						<button
+							className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
+							onClick={() => setModalContent(null)}
+						>
+							Fermer
+						</button>
+					</div>
+				</div>
+			)}
 			<CongratComponent user_name={user_name} rank={rank} />
 			<form
 				onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
